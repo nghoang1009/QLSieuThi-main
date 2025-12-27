@@ -161,10 +161,9 @@ public class HoaDonDAO {
     // Tính tổng tiền hóa đơn
     public int tinhTongTien(int maHoaDon) {
         int tongTien = 0;
-        String sql = "SELECT SUM(sp.gia * ihd.soLuong) as tongTien " +
-                     "FROM item_hoaDon ihd " +
-                     "INNER JOIN sanPham sp ON ihd.maSP = sp.maSP " +
-                     "WHERE ihd.maHoaDon = ?";
+        String sql = "SELECT SUM(gia * soLuong) as tongTien " +
+             "FROM item_hoaDon " +
+             "WHERE maHoaDon = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

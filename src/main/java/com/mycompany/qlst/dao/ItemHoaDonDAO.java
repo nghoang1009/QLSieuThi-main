@@ -9,35 +9,45 @@ import java.util.List;
 public class ItemHoaDonDAO {
     
     // Lấy tất cả items trong hóa đơn
-    public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
-        List<ItemHoaDon> list = new ArrayList<>();
-        String sql = "SELECT ihd.maItemHoaDon, ihd.maSP, sp.tenSP, sp.gia, ihd.soLuong " +
-                     "FROM item_hoaDon ihd " +
-                     "INNER JOIN sanPham sp ON ihd.maSP = sp.maSP " +
-                     "WHERE ihd.maHoaDon = ?";
+public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
+    List<ItemHoaDon> list = new ArrayList<>();
+    
+    // JOIN với bảng sanPham để lấy maSP
+    String sql = "SELECT ihd.maItemHoaDon, ihd.maHoaDon, ihd.tenSP, ihd.gia, ihd.soLuong, " +
+                 "sp.maSP " +
+                 "FROM item_hoaDon ihd " +
+                 "LEFT JOIN sanPham sp ON ihd.tenSP = sp.tenSP " +
+                 "WHERE ihd.maHoaDon = ?";
+    
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
         
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, maHoaDon);
+        ResultSet rs = pstmt.executeQuery();
+        
+        while (rs.next()) {
+            ItemHoaDon item = new ItemHoaDon();
+            item.setMaItemHoaDon(rs.getInt("maItemHoaDon"));
+            item.setMaHoaDon(rs.getInt("maHoaDon"));
+            item.setTenSP(rs.getString("tenSP"));
+            item.setGia(rs.getInt("gia"));
+            item.setSoLuong(rs.getInt("soLuong"));
             
-            pstmt.setInt(1, maHoaDon);
-            ResultSet rs = pstmt.executeQuery();
-            
-            while (rs.next()) {
-                ItemHoaDon item = new ItemHoaDon(
-                    rs.getInt("maItemHoaDon"),
-                    maHoaDon,
-                    rs.getInt("maSP"),
-                    rs.getInt("soLuong")
-                );
-                item.setTenSP(rs.getString("tenSP"));
-                item.setGia(rs.getInt("gia"));
-                list.add(item);
+            // Lấy maSP từ JOIN (có thể null nếu sản phẩm đã bị xóa)
+            int maSP = rs.getInt("maSP");
+            if (!rs.wasNull()) {
+                item.setMaSP(maSP);
+            } else {
+                item.setMaSP(0); // Giá trị mặc định nếu không tìm thấy
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            
+            list.add(item);
         }
-        return list;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return list;
+}
     
     // Thêm item vào hóa đơn (có cập nhật tồn kho)
     public boolean themItem(ItemHoaDon item) {
@@ -46,12 +56,28 @@ public class ItemHoaDonDAO {
             conn = DatabaseConnection.getConnection();
             conn.setAutoCommit(false);
             
-            // Thêm item vào hóa đơn
-            String sql = "INSERT INTO item_hoaDon (maHoaDon, maSP, soLuong) VALUES (?, ?, ?)";
+            // Lấy thông tin sản phẩm từ database
+            String sqlGetSP = "SELECT tenSP, gia FROM sanPham WHERE maSP = ?";
+            PreparedStatement pstmtGetSP = conn.prepareStatement(sqlGetSP);
+            pstmtGetSP.setInt(1, item.getMaSP());
+            ResultSet rs = pstmtGetSP.executeQuery();
+            
+            if (!rs.next()) {
+                conn.rollback();
+                return false;
+            }
+            
+            String tenSP = rs.getString("tenSP");
+            int gia = rs.getInt("gia");
+            
+            // Thêm item vào hóa đơn với tenSP và gia
+            String sql = "INSERT INTO item_hoaDon (maHoaDon, tenSP, gia, soLuong, phanTramGiam) " +
+                        "VALUES (?, ?, ?, ?, 0)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, item.getMaHoaDon());
-            pstmt.setInt(2, item.getMaSP());
-            pstmt.setInt(3, item.getSoLuong());
+            pstmt.setString(2, tenSP);
+            pstmt.setInt(3, gia);
+            pstmt.setInt(4, item.getSoLuong());
             int result = pstmt.executeUpdate();
             
             if (result > 0) {
@@ -187,9 +213,11 @@ public class ItemHoaDonDAO {
         }
     }
     
-    // Kiểm tra sản phẩm đã có trong hóa đơn chưa
+    // Kiểm tra sản phẩm đã có trong hóa đơn chưa (dựa vào tenSP)
     public boolean kiemTraTonTai(int maHoaDon, int maSP) {
-        String sql = "SELECT COUNT(*) FROM item_hoaDon WHERE maHoaDon = ? AND maSP = ?";
+        String sql = "SELECT COUNT(*) FROM item_hoaDon ihd " +
+                    "INNER JOIN sanPham sp ON ihd.tenSP = sp.tenSP " +
+                    "WHERE ihd.maHoaDon = ? AND sp.maSP = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
