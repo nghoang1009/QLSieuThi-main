@@ -11,23 +11,20 @@ public class frmLogin extends JFrame {
     
     // Database connection
     private Connection conn;
-    private final String DB_URL = "jdbc:mysql://localhost:3306/QLBanHangSieuThi";
+    private final String DB_URL = "jdbc:mysql://localhost:3306/qlsieuthi";
     private final String USER = "root";
     private final String PASS = "";
     
     // Thông tin user đã đăng nhập
     public static int maTK;
     public static String tenTK;
-    public static String loaiTK; // "nhanvien" hoặc "khachhang"
+    public static String chucVu;
 
     public frmLogin() {
         super("Đăng nhập hệ thống");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        // Kết nối database
-        connectDatabase();
-        
-        // Thiết lập giao diện
+        connectDatabase();       
         initComponents();
         
         setSize(400, 300);
@@ -100,12 +97,10 @@ public class frmLogin extends JFrame {
         panel.add(btnPanel, gbc);
         
         add(panel);
-        
-        // Event handlers
+
         btnLogin.addActionListener(e -> Login());
         btnExit.addActionListener(e -> System.exit(0));
-        
-        // Enter key login
+
         txtPassword.addActionListener(e -> Login());
         txtUsername.addActionListener(e -> txtPassword.requestFocus());
     }
@@ -126,8 +121,7 @@ public class frmLogin extends JFrame {
             System.exit(0);
         }
     }
-    
-    // Xử lý đăng nhập
+
     private void Login() {
         String username = txtUsername.getText().trim();
         String password = new String(txtPassword.getPassword()).trim();
@@ -138,7 +132,7 @@ public class frmLogin extends JFrame {
         }
         
         try {
-            String sql = "SELECT maTK, tenTK FROM taiKhoan WHERE tenTK = ? AND matKhau = ?";
+            String sql = "SELECT maTK, tenTK, chucVu FROM taiKhoan WHERE tenTK = ? AND matKhau = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -148,24 +142,14 @@ public class frmLogin extends JFrame {
             if (rs.next()) {
                 maTK = rs.getInt("maTK");
                 tenTK = rs.getString("tenTK");
+                chucVu = rs.getString("chucVu");
                 
-                // Kiểm tra loại tài khoản
-                String sqlCheckNV = "SELECT maNV FROM nhanVien WHERE maNV = ?";
-                PreparedStatement pstmtNV = conn.prepareStatement(sqlCheckNV);
-                pstmtNV.setInt(1, maTK);
-                ResultSet rsNV = pstmtNV.executeQuery();
-                
-                if (rsNV.next()) {
-                    loaiTK = "nhanvien";
-                } else {
-                    loaiTK = "khachhang";
-                }
+                String chucVuText = chucVu.equals("1") ? "Admin" : "Nhân viên";
                 
                 JOptionPane.showMessageDialog(this, 
-                    "Đăng nhập thành công!\nXin chào " + tenTK, 
+                    "Đăng nhập thành công!\nXin chào " + tenTK + " (" + chucVuText + ")", 
                     "Thành công", JOptionPane.INFORMATION_MESSAGE);
                 
-                // Mở form chính (bạn có thể thay bằng form menu chính của mình)
                 this.dispose();
                 openMainForm();
                 
@@ -182,15 +166,12 @@ public class frmLogin extends JFrame {
             e.printStackTrace();
         }
     }
-    
-    // Mở form chính sau khi đăng nhập
+
     private void openMainForm() {
-        // Mở form Trang chủ
         frmTrangChu trangChu = new frmTrangChu();
         trangChu.setVisible(true);
     }
-    
-    // Đóng kết nối khi đóng form
+
     @Override
     public void dispose() {
         try {
@@ -205,6 +186,6 @@ public class frmLogin extends JFrame {
     }
     
     public static void main(String[] args) {
-            frmLogin loginForm = new frmLogin();
+        frmLogin loginForm = new frmLogin();
     }
 }
