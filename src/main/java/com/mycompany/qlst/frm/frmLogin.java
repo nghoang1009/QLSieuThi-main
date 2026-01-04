@@ -132,7 +132,7 @@ public class frmLogin extends JFrame {
         }
         
         try {
-            String sql = "SELECT maTK, tenTK, chucVu FROM taiKhoan WHERE tenTK = ? AND matKhau = ?";
+            String sql = "SELECT maTK, tenTK, chucVu FROM taikhoan WHERE tenTK = ? AND matKhau = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
