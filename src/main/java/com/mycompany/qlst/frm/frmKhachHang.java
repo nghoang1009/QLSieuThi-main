@@ -40,14 +40,10 @@ public class frmKhachHang extends JFrame {
         JPanel pnLeft = new JPanel(new BorderLayout());
         khuVucListModel = new DefaultListModel<>();
         khuVucListModel.addElement("Tất cả khách hàng");
-        khuVucListModel.addElement("Quận 1");
-        khuVucListModel.addElement("Quận 3");
-        khuVucListModel.addElement("Quận 5");
-        khuVucListModel.addElement("Quận 10");
-        khuVucListModel.addElement("Quận Bình Thạnh");
-        khuVucListModel.addElement("Quận Tân Bình");
-        khuVucListModel.addElement("Quận 11");
-        khuVucListModel.addElement("Quận Phú Nhuận");
+        khuVucListModel.addElement("Hai Bà Trưng");
+        khuVucListModel.addElement("Đống Đa");
+        khuVucListModel.addElement("Thanh Xuân");
+        khuVucListModel.addElement("Hoàng Mai");
         
         listKhuVuc = new JList<>(khuVucListModel);
         JScrollPane scrollPane = new JScrollPane(listKhuVuc);

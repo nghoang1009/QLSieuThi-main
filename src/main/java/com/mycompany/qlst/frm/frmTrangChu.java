@@ -55,11 +55,14 @@ public class frmTrangChu extends JFrame {
         JMenuItem mSanPham = new JMenuItem("Sản phẩm");
         JMenuItem mKhachHang = new JMenuItem("Khách hàng");
         JMenuItem mNhanVien = new JMenuItem("Nhân viên");
+        JMenuItem mNhaCungCap = new JMenuItem("Nhà cung cấp");
+        JMenuItem mKhuyenMai = new JMenuItem("Khuyến mãi");
         
         menuQuanLy.add(mSanPham);
+        menuQuanLy.add(mNhaCungCap);
         menuQuanLy.add(mKhachHang);
-        menuQuanLy.addSeparator();
         menuQuanLy.add(mNhanVien);
+        menuQuanLy.add(mKhuyenMai);
         
         // Phân quyền: Chỉ Admin mới xem được Nhân viên
         if (!frmLogin.chucVu.equals("1")) {
@@ -81,10 +84,9 @@ public class frmTrangChu extends JFrame {
         JMenu menuThongKe = new JMenu("Thống kê");
         
         JMenuItem mThongKe = new JMenuItem("Xem thống kê");
-        JMenuItem mBaoCao = new JMenuItem("Báo cáo");
         
         menuThongKe.add(mThongKe);
-        menuThongKe.add(mBaoCao);
+   
         
         // Phân quyền: Chỉ Admin mới xem được Thống kê
         if (!frmLogin.chucVu.equals("1")) {
@@ -146,19 +148,18 @@ public class frmTrangChu extends JFrame {
         });
         
         mThongKe.addActionListener(e -> {
-            if (frmLogin.chucVu.equals("1")) {
-                JOptionPane.showMessageDialog(this, 
-                    "Chức năng đang phát triển!", 
-                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            }
+            frmThongKe frmThongKe = new frmThongKe();
+            frmThongKe.setVisible(true);
         });
         
-        mBaoCao.addActionListener(e -> {
-            if (frmLogin.chucVu.equals("1")) {
-                JOptionPane.showMessageDialog(this, 
-                    "Chức năng đang phát triển!", 
-                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            }
+        mKhuyenMai.addActionListener(e -> {
+            frmKhuyenMai frmKhuyenMai = new frmKhuyenMai();
+            frmKhuyenMai.setVisible(true);
+        });
+
+        mNhaCungCap.addActionListener(e ->{
+            frmNhaCungCap frmNhaCungCap = new frmNhaCungCap();
+            frmNhaCungCap.setVisible(true);
         });
         
         mDangXuat.addActionListener(e -> {

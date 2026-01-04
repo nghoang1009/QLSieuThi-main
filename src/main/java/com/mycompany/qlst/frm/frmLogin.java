@@ -11,7 +11,7 @@ public class frmLogin extends JFrame {
     
     // Database connection
     private Connection conn;
-    private final String DB_URL = "jdbc:mysql://localhost:3306/qlsieuthi";
+    private final String DB_URL = "jdbc:mysql://localhost:3306/QLSieuThi";
     private final String USER = "root";
     private final String PASS = "";
     
