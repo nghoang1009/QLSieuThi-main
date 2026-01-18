@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.GioHang;
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ public class GioHangDAO {
     public List<GioHang> getAllGioHang() {
         List<GioHang> list = new ArrayList<>();
         String sql = "SELECT gh.maGioHang, gh.maKH, kh.ten, gh.ngayTao " +
-                     "FROM gioHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "ORDER BY gh.maGioHang DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -38,11 +38,11 @@ public class GioHangDAO {
     // Lấy giỏ hàng theo mã
     public GioHang getGioHangById(int maGioHang) {
         String sql = "SELECT gh.maGioHang, gh.maKH, kh.ten, gh.ngayTao " +
-                     "FROM gioHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "WHERE gh.maGioHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGioHang);
@@ -67,12 +67,12 @@ public class GioHangDAO {
     public List<GioHang> getGioHangByKhachHang(int maKH) {
         List<GioHang> list = new ArrayList<>();
         String sql = "SELECT gh.maGioHang, gh.maKH, kh.ten, gh.ngayTao " +
-                     "FROM gioHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "WHERE gh.maKH = ? " +
                      "ORDER BY gh.maGioHang DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maKH);
@@ -95,9 +95,9 @@ public class GioHangDAO {
     
     // Thêm giỏ hàng
     public boolean themGioHang(GioHang gh) {
-        String sql = "INSERT INTO gioHang (maKH, ngayTao) VALUES (?, ?)";
+        String sql = "INSERT INTO giohang (maKH, ngayTao) VALUES (?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, gh.getMaKH());
@@ -113,9 +113,9 @@ public class GioHangDAO {
     
     // Xóa giỏ hàng
     public boolean xoaGioHang(int maGioHang) {
-        String sql = "DELETE FROM gioHang WHERE maGioHang = ?";
+        String sql = "DELETE FROM giohang WHERE maGioHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGioHang);
@@ -131,12 +131,12 @@ public class GioHangDAO {
     public List<GioHang> timKiemGioHang(String keyword) {
         List<GioHang> list = new ArrayList<>();
         String sql = "SELECT gh.maGioHang, gh.maKH, kh.ten, gh.ngayTao " +
-                     "FROM gioHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "WHERE kh.ten LIKE ? " +
                      "ORDER BY gh.maGioHang DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");
@@ -161,11 +161,11 @@ public class GioHangDAO {
     public int tinhTongTien(int maGioHang) {
         int tongTien = 0;
         String sql = "SELECT SUM(sp.gia * igh.soLuong) as tongTien " +
-                     "FROM item_gioHang igh " +
-                     "INNER JOIN sanPham sp ON igh.maSP = sp.maSP " +
+                     "FROM item_giohang igh " +
+                     "INNER JOIN sanpham sp ON igh.maSP = sp.maSP " +
                      "WHERE igh.maGioHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGioHang);

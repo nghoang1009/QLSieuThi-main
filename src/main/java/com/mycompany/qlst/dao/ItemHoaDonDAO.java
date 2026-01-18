@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.ItemHoaDon;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     // JOIN với bảng sanPham để lấy maSP
     String sql = "SELECT ihd.maItemHoaDon, ihd.maHoaDon, ihd.tenSP, ihd.gia, ihd.soLuong, " +
                  "sp.maSP " +
-                 "FROM item_hoaDon ihd " +
-                 "LEFT JOIN sanPham sp ON ihd.tenSP = sp.tenSP " +
+                 "FROM item_hoadon ihd " +
+                 "LEFT JOIN sanpham sp ON ihd.tenSP = sp.tenSP " +
                  "WHERE ihd.maHoaDon = ?";
     
-    try (Connection conn = DatabaseConnection.getConnection();
+    try (Connection conn = DatabaseConnector.getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
         
         pstmt.setInt(1, maHoaDon);
@@ -53,11 +53,11 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     public boolean themItem(ItemHoaDon item) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Lấy thông tin sản phẩm từ database
-            String sqlGetSP = "SELECT tenSP, gia FROM sanPham WHERE maSP = ?";
+            String sqlGetSP = "SELECT tenSP, gia FROM sanpham WHERE maSP = ?";
             PreparedStatement pstmtGetSP = conn.prepareStatement(sqlGetSP);
             pstmtGetSP.setInt(1, item.getMaSP());
             ResultSet rs = pstmtGetSP.executeQuery();
@@ -71,7 +71,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
             int gia = rs.getInt("gia");
             
             // Thêm item vào hóa đơn với tenSP và gia
-            String sql = "INSERT INTO item_hoaDon (maHoaDon, tenSP, gia, soLuong, phanTramGiam) " +
+            String sql = "INSERT INTO item_hoadon (maHoaDon, tenSP, gia, soLuong, phanTramGiam) " +
                         "VALUES (?, ?, ?, ?, 0)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, item.getMaHoaDon());
@@ -82,7 +82,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
             
             if (result > 0) {
                 // Trừ số lượng trong kho
-                String sqlUpdate = "UPDATE sanPham SET soLuong = soLuong - ? WHERE maSP = ?";
+                String sqlUpdate = "UPDATE sanpham SET soLuong = soLuong - ? WHERE maSP = ?";
                 PreparedStatement pstmtUpdate = conn.prepareStatement(sqlUpdate);
                 pstmtUpdate.setInt(1, item.getSoLuong());
                 pstmtUpdate.setInt(2, item.getMaSP());
@@ -119,11 +119,11 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     public boolean capNhatSoLuong(int maItemHoaDon, int maSP, int soLuongCu, int soLuongMoi) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Cập nhật số lượng item
-            String sql = "UPDATE item_hoaDon SET soLuong = ? WHERE maItemHoaDon = ?";
+            String sql = "UPDATE item_hoadon SET soLuong = ? WHERE maItemHoaDon = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, soLuongMoi);
             pstmt.setInt(2, maItemHoaDon);
@@ -132,7 +132,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
             if (result > 0) {
                 // Cập nhật số lượng trong kho (trừ/cộng chênh lệch)
                 int chenhLech = soLuongMoi - soLuongCu;
-                String sqlUpdate = "UPDATE sanPham SET soLuong = soLuong - ? WHERE maSP = ?";
+                String sqlUpdate = "UPDATE sanpham SET soLuong = soLuong - ? WHERE maSP = ?";
                 PreparedStatement pstmtUpdate = conn.prepareStatement(sqlUpdate);
                 pstmtUpdate.setInt(1, chenhLech);
                 pstmtUpdate.setInt(2, maSP);
@@ -169,18 +169,18 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     public boolean xoaItem(int maItemHoaDon, int maSP, int soLuong) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Xóa item
-            String sql = "DELETE FROM item_hoaDon WHERE maItemHoaDon = ?";
+            String sql = "DELETE FROM item_hoadon WHERE maItemHoaDon = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, maItemHoaDon);
             int result = pstmt.executeUpdate();
             
             if (result > 0) {
                 // Cộng lại số lượng vào kho
-                String sqlUpdate = "UPDATE sanPham SET soLuong = soLuong + ? WHERE maSP = ?";
+                String sqlUpdate = "UPDATE sanpham SET soLuong = soLuong + ? WHERE maSP = ?";
                 PreparedStatement pstmtUpdate = conn.prepareStatement(sqlUpdate);
                 pstmtUpdate.setInt(1, soLuong);
                 pstmtUpdate.setInt(2, maSP);
@@ -215,11 +215,11 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     
     // Kiểm tra sản phẩm đã có trong hóa đơn chưa (dựa vào tenSP)
     public boolean kiemTraTonTai(int maHoaDon, int maSP) {
-        String sql = "SELECT COUNT(*) FROM item_hoaDon ihd " +
-                    "INNER JOIN sanPham sp ON ihd.tenSP = sp.tenSP " +
+        String sql = "SELECT COUNT(*) FROM item_hoadon ihd " +
+                    "INNER JOIN sanpham sp ON ihd.tenSP = sp.tenSP " +
                     "WHERE ihd.maHoaDon = ? AND sp.maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maHoaDon);

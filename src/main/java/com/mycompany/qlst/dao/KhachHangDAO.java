@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.KhachHang;
 import com.mycompany.qlst.model.TaiKhoan;
 import java.sql.*;
@@ -17,9 +17,9 @@ public class KhachHangDAO {
     // Lấy tất cả khách hàng
     public List<KhachHang> getAllKhachHang() {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -40,9 +40,9 @@ public class KhachHangDAO {
     
     // Lấy khách hàng theo mã (bao gồm thông tin tài khoản)
     public KhachHang getKhachHangById(int maKH) {
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE maKH = ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE maKH = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maKH);
@@ -71,9 +71,9 @@ public class KhachHangDAO {
     // Lấy khách hàng theo khu vực
     public List<KhachHang> getKhachHangByKhuVuc(String khuVuc) {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE diachi LIKE ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE diachi LIKE ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + khuVuc + "%");
@@ -98,7 +98,7 @@ public class KhachHangDAO {
     public boolean themKhachHang(KhachHang kh, TaiKhoan tk) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Thêm tài khoản trước
@@ -109,7 +109,7 @@ public class KhachHangDAO {
             }
             
             // Thêm khách hàng với maTK vừa tạo
-            String sql = "INSERT INTO khachHang (maKH, ten, sdt, diachi) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO khachhang (maKH, ten, sdt, diachi) VALUES (?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setInt(1, maTK);
                 pstmt.setString(2, kh.getTen());
@@ -151,7 +151,7 @@ public class KhachHangDAO {
     public boolean suaKhachHang(KhachHang kh, TaiKhoan tk) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Update tài khoản
@@ -162,7 +162,7 @@ public class KhachHangDAO {
             }
             
             // Update khách hàng
-            String sql = "UPDATE khachHang SET ten=?, sdt=?, diachi=? WHERE maKH=?";
+            String sql = "UPDATE khachhang SET ten=?, sdt=?, diachi=? WHERE maKH=?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, kh.getTen());
                 pstmt.setString(2, kh.getSdt());
@@ -208,9 +208,9 @@ public class KhachHangDAO {
     // Tìm kiếm khách hàng theo tên hoặc SĐT
     public List<KhachHang> timKiemKhachHang(String keyword) {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE ten LIKE ? OR sdt LIKE ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE ten LIKE ? OR sdt LIKE ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");

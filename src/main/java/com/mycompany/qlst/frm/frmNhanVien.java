@@ -1,6 +1,7 @@
 package com.mycompany.qlst.frm;
 
 import com.mycompany.qlst.dao.NhanVienDAO;
+import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.NhanVien;
 import com.mycompany.qlst.model.TaiKhoan;
 
@@ -29,7 +30,11 @@ public class frmNhanVien extends JFrame {
 
     public frmNhanVien() {
         super("Quản lý nhân viên");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
         
         // Khởi tạo DAO
         nhanVienDAO = new NhanVienDAO();
@@ -141,8 +146,9 @@ public class frmNhanVien extends JFrame {
         JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
         add(jSplitPane);
 
-        setSize(900, 550);
+        pack();
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadAllNhanVien();

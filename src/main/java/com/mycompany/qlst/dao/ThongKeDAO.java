@@ -1,16 +1,17 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 
 public class ThongKeDAO {
     
     // Thống kê tổng quan
     public Map<String, Integer> thongKeTongQuan() {
         Map<String, Integer> result = new HashMap<>();
-        Connection conn = DatabaseConnection.getConnection();
+        Connection conn = DatabaseConnector.getConnection();
         
         try {
             // Đếm số sản phẩm
@@ -62,7 +63,7 @@ public class ThongKeDAO {
                      "GROUP BY MONTH(ngayThanhToan) " +
                      "ORDER BY thang";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, nam);
@@ -88,7 +89,7 @@ public class ThongKeDAO {
                      "ORDER BY tongSoLuong DESC " +
                      "LIMIT ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, limit);
@@ -109,7 +110,7 @@ public class ThongKeDAO {
         Map<String, Integer> result = new HashMap<>();
         String sql = "SELECT tenSP, soLuong FROM sanpham ORDER BY soLuong ASC LIMIT 10";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -132,7 +133,7 @@ public class ThongKeDAO {
                      "GROUP BY dm.maDM, dm.tenDM " +
                      "ORDER BY soLuong DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -156,7 +157,7 @@ public class ThongKeDAO {
                      "GROUP BY nv.maNV, nv.ten " +
                      "ORDER BY doanhThu DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -174,7 +175,7 @@ public class ThongKeDAO {
     public long tongDoanhThu() {
         String sql = "SELECT SUM(gia * soLuong) as tongDoanhThu FROM item_hoadon";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -195,7 +196,7 @@ public class ThongKeDAO {
                      "INNER JOIN item_hoadon ih ON hd.maHoaDon = ih.maHoaDon " +
                      "WHERE hd.ngayThanhToan BETWEEN ? AND ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setDate(1, tuNgay);
