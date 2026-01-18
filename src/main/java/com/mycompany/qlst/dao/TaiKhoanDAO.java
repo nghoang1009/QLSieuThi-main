@@ -8,7 +8,7 @@ public class TaiKhoanDAO {
     
     // Thêm tài khoản và trả về mã tài khoản vừa tạo
     public int themTaiKhoan(TaiKhoan tk) {
-        String sql = "INSERT INTO taiKhoan (tenTK, matKhau) VALUES (?, ?)";
+        String sql = "INSERT INTO taikhoan (tenTK, matKhau) VALUES (?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -32,7 +32,7 @@ public class TaiKhoanDAO {
     
     // Lấy tài khoản theo mã
     public TaiKhoan getTaiKhoanById(int maTK) {
-        String sql = "SELECT maTK, tenTK, matKhau FROM taiKhoan WHERE maTK = ?";
+        String sql = "SELECT maTK, tenTK, matKhau FROM taikhoan WHERE maTK = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -55,7 +55,7 @@ public class TaiKhoanDAO {
     
     // Sửa tài khoản
     public boolean suaTaiKhoan(TaiKhoan tk) {
-        String sql = "UPDATE taiKhoan SET tenTK = ?, matKhau = ? WHERE maTK = ?";
+        String sql = "UPDATE taikhoan SET tenTK = ?, matKhau = ? WHERE maTK = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -74,7 +74,7 @@ public class TaiKhoanDAO {
     
     // Xóa tài khoản
     public boolean xoaTaiKhoan(int maTK) {
-        String sql = "DELETE FROM taiKhoan WHERE maTK = ?";
+        String sql = "DELETE FROM taikhoan WHERE maTK = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

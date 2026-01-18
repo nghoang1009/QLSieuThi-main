@@ -24,7 +24,7 @@ public class frmLogin extends JFrame {
         super("Đăng nhập hệ thống");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        connectDatabase();       
+        connectDatabase();
         initComponents();
         
         setSize(400, 300);
@@ -110,7 +110,6 @@ public class frmLogin extends JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Kết nối database thành công!");
         } catch (ClassNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Không tìm thấy driver MySQL!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -177,7 +176,6 @@ public class frmLogin extends JFrame {
         try {
             if (conn != null && !conn.isClosed()) {
                 conn.close();
-                System.out.println("Đã đóng kết nối database!");
             }
         } catch (SQLException e) {
             e.printStackTrace();

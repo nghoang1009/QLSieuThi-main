@@ -12,8 +12,8 @@ public class GiaoHangDAO {
     public List<GiaoHang> getAllGiaoHang() {
         List<GiaoHang> list = new ArrayList<>();
         String sql = "SELECT gh.maGiaoHang, gh.maKH, kh.ten, gh.ngayTao, gh.tinhTrang " +
-                     "FROM giaoHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giaohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "ORDER BY gh.maGiaoHang DESC";
         
         try (Connection conn = DatabaseConnection.getConnection();
@@ -39,8 +39,8 @@ public class GiaoHangDAO {
     // Lấy giao hàng theo mã
     public GiaoHang getGiaoHangById(int maGiaoHang) {
         String sql = "SELECT gh.maGiaoHang, gh.maKH, kh.ten, gh.ngayTao, gh.tinhTrang " +
-                     "FROM giaoHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giaohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "WHERE gh.maGiaoHang = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
@@ -69,8 +69,8 @@ public class GiaoHangDAO {
     public List<GiaoHang> getGiaoHangByTinhTrang(String tinhTrang) {
         List<GiaoHang> list = new ArrayList<>();
         String sql = "SELECT gh.maGiaoHang, gh.maKH, kh.ten, gh.ngayTao, gh.tinhTrang " +
-                     "FROM giaoHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giaohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "WHERE gh.tinhTrang = ? " +
                      "ORDER BY gh.maGiaoHang DESC";
         
@@ -98,7 +98,7 @@ public class GiaoHangDAO {
     
     // Thêm đơn giao hàng
     public boolean themGiaoHang(GiaoHang gh) {
-        String sql = "INSERT INTO giaoHang (maKH, ngayTao, tinhTrang) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO giaohang (maKH, ngayTao, tinhTrang) VALUES (?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -117,7 +117,7 @@ public class GiaoHangDAO {
     
     // Cập nhật tình trạng giao hàng
     public boolean capNhatTinhTrang(int maGiaoHang, String tinhTrang) {
-        String sql = "UPDATE giaoHang SET tinhTrang = ? WHERE maGiaoHang = ?";
+        String sql = "UPDATE giaohang SET tinhTrang = ? WHERE maGiaoHang = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -135,7 +135,7 @@ public class GiaoHangDAO {
     
     // Xóa đơn giao hàng
     public boolean xoaGiaoHang(int maGiaoHang) {
-        String sql = "DELETE FROM giaoHang WHERE maGiaoHang = ?";
+        String sql = "DELETE FROM giaohang WHERE maGiaoHang = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -153,8 +153,8 @@ public class GiaoHangDAO {
     public List<GiaoHang> timKiemGiaoHang(String keyword) {
         List<GiaoHang> list = new ArrayList<>();
         String sql = "SELECT gh.maGiaoHang, gh.maKH, kh.ten, gh.ngayTao, gh.tinhTrang " +
-                     "FROM giaoHang gh " +
-                     "INNER JOIN khachHang kh ON gh.maKH = kh.maKH " +
+                     "FROM giaohang gh " +
+                     "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "WHERE kh.ten LIKE ? " +
                      "ORDER BY gh.maGiaoHang DESC";
         
@@ -184,8 +184,8 @@ public class GiaoHangDAO {
     public int tinhTongTien(int maGiaoHang) {
         int tongTien = 0;
         String sql = "SELECT SUM(sp.gia * igh.soLuong) as tongTien " +
-                     "FROM item_giaoHang igh " +
-                     "INNER JOIN sanPham sp ON igh.maSP = sp.maSP " +
+                     "FROM item_giaohang igh " +
+                     "INNER JOIN sanpham sp ON igh.maSP = sp.maSP " +
                      "WHERE igh.maGiaoHang = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();

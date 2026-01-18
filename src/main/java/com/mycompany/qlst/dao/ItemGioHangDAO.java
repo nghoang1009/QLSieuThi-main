@@ -12,8 +12,8 @@ public class ItemGioHangDAO {
     public List<ItemGioHang> getItemsByGioHang(int maGioHang) {
         List<ItemGioHang> list = new ArrayList<>();
         String sql = "SELECT igh.maItemGioHang, igh.maSP, sp.tenSP, sp.gia, igh.soLuong " +
-                     "FROM item_gioHang igh " +
-                     "INNER JOIN sanPham sp ON igh.maSP = sp.maSP " +
+                     "FROM item_giohang igh " +
+                     "INNER JOIN sanpham sp ON igh.maSP = sp.maSP " +
                      "WHERE igh.maGioHang = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
@@ -60,7 +60,7 @@ public class ItemGioHangDAO {
     
     // Cập nhật số lượng item
     public boolean capNhatSoLuong(int maItemGioHang, int soLuongMoi) {
-        String sql = "UPDATE item_gioHang SET soLuong = ? WHERE maItemGioHang = ?";
+        String sql = "UPDATE item_giohang SET soLuong = ? WHERE maItemGioHang = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -78,7 +78,7 @@ public class ItemGioHangDAO {
     
     // Xóa item khỏi giỏ hàng
     public boolean xoaItem(int maItemGioHang) {
-        String sql = "DELETE FROM item_gioHang WHERE maItemGioHang = ?";
+        String sql = "DELETE FROM item_giohang WHERE maItemGioHang = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -94,7 +94,7 @@ public class ItemGioHangDAO {
     
     // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
     public boolean kiemTraTonTai(int maGioHang, int maSP) {
-        String sql = "SELECT COUNT(*) FROM item_gioHang WHERE maGioHang = ? AND maSP = ?";
+        String sql = "SELECT COUNT(*) FROM item_giohang WHERE maGioHang = ? AND maSP = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
