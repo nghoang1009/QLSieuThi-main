@@ -17,7 +17,7 @@ public class NhanVienDAO {
     // Lấy tất cả nhân viên
     public List<NhanVien> getAllNhanVien() {
         List<NhanVien> list = new ArrayList<>();
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien";
         
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -42,7 +42,7 @@ public class NhanVienDAO {
     
     // Lấy nhân viên theo mã (bao gồm thông tin tài khoản)
     public NhanVien getNhanVienById(int maNV) {
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien WHERE maNV = ?";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE maNV = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -75,7 +75,7 @@ public class NhanVienDAO {
     // Lấy nhân viên theo giới tính
     public List<NhanVien> getNhanVienByGioiTinh(String gioiTinh) {
         List<NhanVien> list = new ArrayList<>();
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien WHERE gioiTinh = ?";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE gioiTinh = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -115,7 +115,7 @@ public class NhanVienDAO {
             }
             
             // Thêm nhân viên với maTK vừa tạo
-            String sql = "INSERT INTO nhanVien (maNV, ten, ngaySinh, gioiTinh, sdt, diaChi) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO nhanvien (maNV, ten, ngaySinh, gioiTinh, sdt, diaChi) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setInt(1, maTK);
                 pstmt.setString(2, nv.getTen());
@@ -170,7 +170,7 @@ public class NhanVienDAO {
             }
             
             // Update nhân viên
-            String sql = "UPDATE nhanVien SET ten=?, ngaySinh=?, gioiTinh=?, sdt=?, diaChi=? WHERE maNV=?";
+            String sql = "UPDATE nhanvien SET ten=?, ngaySinh=?, gioiTinh=?, sdt=?, diaChi=? WHERE maNV=?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, nv.getTen());
                 pstmt.setDate(2, nv.getNgaySinh());
@@ -218,7 +218,7 @@ public class NhanVienDAO {
     // Tìm kiếm nhân viên theo tên
     public List<NhanVien> timKiemNhanVien(String keyword) {
         List<NhanVien> list = new ArrayList<>();
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien WHERE ten LIKE ?";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE ten LIKE ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

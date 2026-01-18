@@ -12,8 +12,8 @@ public class HoaDonDAO {
     public List<HoaDon> getAllHoaDon() {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT hd.maHoaDon, hd.maNV, nv.ten, hd.ngayThanhToan " +
-                     "FROM hoaDon hd " +
-                     "INNER JOIN nhanVien nv ON hd.maNV = nv.maNV " +
+                     "FROM hoadon hd " +
+                     "INNER JOIN nhanvien nv ON hd.maNV = nv.maNV " +
                      "ORDER BY hd.maHoaDon DESC";
         
         try (Connection conn = DatabaseConnection.getConnection();
@@ -38,8 +38,8 @@ public class HoaDonDAO {
     // Lấy hóa đơn theo mã
     public HoaDon getHoaDonById(int maHoaDon) {
         String sql = "SELECT hd.maHoaDon, hd.maNV, nv.ten, hd.ngayThanhToan " +
-                     "FROM hoaDon hd " +
-                     "INNER JOIN nhanVien nv ON hd.maNV = nv.maNV " +
+                     "FROM hoadon hd " +
+                     "INNER JOIN nhanvien nv ON hd.maNV = nv.maNV " +
                      "WHERE hd.maHoaDon = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
@@ -67,8 +67,8 @@ public class HoaDonDAO {
     public List<HoaDon> getHoaDonByNhanVien(int maNV) {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT hd.maHoaDon, hd.maNV, nv.ten, hd.ngayThanhToan " +
-                     "FROM hoaDon hd " +
-                     "INNER JOIN nhanVien nv ON hd.maNV = nv.maNV " +
+                     "FROM hoadon hd " +
+                     "INNER JOIN nhanvien nv ON hd.maNV = nv.maNV " +
                      "WHERE hd.maNV = ? " +
                      "ORDER BY hd.maHoaDon DESC";
         
@@ -95,7 +95,7 @@ public class HoaDonDAO {
     
     // Thêm hóa đơn
     public boolean themHoaDon(HoaDon hd) {
-        String sql = "INSERT INTO hoaDon (maNV, ngayThanhToan) VALUES (?, ?)";
+        String sql = "INSERT INTO hoadon (maNV, ngayThanhToan) VALUES (?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -113,7 +113,7 @@ public class HoaDonDAO {
     
     // Xóa hóa đơn
     public boolean xoaHoaDon(int maHoaDon) {
-        String sql = "DELETE FROM hoaDon WHERE maHoaDon = ?";
+        String sql = "DELETE FROM hoadon WHERE maHoaDon = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -131,8 +131,8 @@ public class HoaDonDAO {
     public List<HoaDon> timKiemHoaDon(String keyword) {
         List<HoaDon> list = new ArrayList<>();
         String sql = "SELECT hd.maHoaDon, hd.maNV, nv.ten, hd.ngayThanhToan " +
-                     "FROM hoaDon hd " +
-                     "INNER JOIN nhanVien nv ON hd.maNV = nv.maNV " +
+                     "FROM hoadon hd " +
+                     "INNER JOIN nhanvien nv ON hd.maNV = nv.maNV " +
                      "WHERE hd.maHoaDon LIKE ? OR nv.ten LIKE ? " +
                      "ORDER BY hd.maHoaDon DESC";
         
@@ -162,7 +162,7 @@ public class HoaDonDAO {
     public int tinhTongTien(int maHoaDon) {
         int tongTien = 0;
         String sql = "SELECT SUM(gia * soLuong) as tongTien " +
-             "FROM item_hoaDon " +
+             "FROM item_hoadon " +
              "WHERE maHoaDon = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
