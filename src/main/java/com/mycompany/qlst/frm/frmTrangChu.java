@@ -33,8 +33,8 @@ public class frmTrangChu extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         JLabel lblTitle = new JLabel("HỆ THỐNG QUẢN LÝ SIÊU THỊ");
 
-        String chucVuText = frmLogin.chucVu.equals("1") ? "Admin" : "Nhân viên";
-        JLabel lblUserInfo = new JLabel("Xin chào: " + frmLogin.tenTK + " (" + chucVuText + ")");
+        String chucVuText = frmDangNhap.chucVu.equals("1") ? "Admin" : "Nhân viên";
+        JLabel lblUserInfo = new JLabel("Xin chào: " + frmDangNhap.tenTK + " (" + chucVuText + ")");
 
 
         headerPanel.setBackground(new Color(41, 128, 185));

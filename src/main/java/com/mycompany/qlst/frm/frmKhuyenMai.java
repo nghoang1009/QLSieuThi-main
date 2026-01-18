@@ -43,14 +43,8 @@ public class frmKhuyenMai extends JFrame {
         var menuBar = DefaultMenuBar.createMenuBar(this);
         setJMenuBar(menuBar);
 
-        var tabs = new JTabbedPane();
-        var tabKM = new JPanel(new BorderLayout());
-        var tabApDung = new JPanel(new BorderLayout());
         
         // ============ Khuyến mãi ============
-        tabs.addTab("Mã giảm giá", tabKM);
-        tabs.addTab("Áp dụng", tabApDung);
-
         var titleKM = new JLabel("QUẢN LÝ MÃ GIẢM GIÁ", JLabel.CENTER);
         var font = new Font("Arial", Font.BOLD, 20);
 
@@ -89,9 +83,6 @@ public class frmKhuyenMai extends JFrame {
         var btnDeleteKM = new JButton("Xóa");
         var btnClearKM = new JButton("Clear");
 
-        // ============ Áp dụng ============
-        
-
 
         // ============ Chỉnh sửa các thành phần ============
         tfMaKM.setEditable(false);
@@ -104,9 +95,9 @@ public class frmKhuyenMai extends JFrame {
         
         // ============ Hiển thị lên màn hình ============
         // ============ Khuyến mãi ============
-        tabKM.add(titleKM, BorderLayout.NORTH);
-        tabKM.add(scrollTableKM, BorderLayout.CENTER);
-        tabKM.add(eastLayout, BorderLayout.EAST);
+        add(titleKM, BorderLayout.NORTH);
+        add(scrollTableKM, BorderLayout.CENTER);
+        add(eastLayout, BorderLayout.EAST);
 
         pnKMButton.add(btnAddKM);
         pnKMButton.add(btnEditKM);
@@ -140,11 +131,10 @@ public class frmKhuyenMai extends JFrame {
                      c.gridy = 2; pnKMTextField.add(tfPhanTramGiam, c);
                      c.gridy = 3; pnKMTextField.add(pnNgayHieuLuc, c);
                      c.gridy = 4; pnKMTextField.add(pnNgayKetThuc, c);
-        eastLayout.add(pnKMTextField);
+        eastLayout.add(pnKMTextField, BorderLayout.NORTH);
 
 
-        add(tabs);
-        setSize(950, 550);
+        pack();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -185,7 +175,14 @@ public class frmKhuyenMai extends JFrame {
     }
 
     private KhuyenMai getTextField() {
-        int maKM = Integer.parseInt(tfMaKM.getText());
+        int maKM;
+        try {
+            maKM = Integer.parseInt(tfMaKM.getText());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Bạn chưa điền hoặc chọn khuyến mãi nào cả!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
         String tenKM = tfTenKM.getText();
 
         if (tenKM.trim().isEmpty()) {

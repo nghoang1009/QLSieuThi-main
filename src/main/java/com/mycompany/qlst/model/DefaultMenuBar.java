@@ -11,7 +11,7 @@ import com.mycompany.qlst.frm.frmGioHang;
 import com.mycompany.qlst.frm.frmHoaDon;
 import com.mycompany.qlst.frm.frmKhachHang;
 import com.mycompany.qlst.frm.frmKhuyenMai;
-import com.mycompany.qlst.frm.frmLogin;
+import com.mycompany.qlst.frm.frmDangNhap;
 import com.mycompany.qlst.frm.frmNhaCungCap;
 import com.mycompany.qlst.frm.frmNhanVien;
 import com.mycompany.qlst.frm.frmSanPham;
@@ -37,7 +37,7 @@ public class DefaultMenuBar {
         menuQuanLy.add(mKhuyenMai);
         
         // Phân quyền: Chỉ Admin mới xem được Nhân viên
-        if (!frmLogin.chucVu.equals("1")) {
+        if (!frmDangNhap.chucVu.equals("1")) {
             mNhanVien.setEnabled(false);
         }
         
@@ -61,7 +61,7 @@ public class DefaultMenuBar {
    
         
         // Phân quyền: Chỉ Admin mới xem được Thống kê
-        if (!frmLogin.chucVu.equals("1")) {
+        if (!frmDangNhap.chucVu.equals("1")) {
             menuThongKe.setEnabled(false);
         }
         
@@ -92,7 +92,7 @@ public class DefaultMenuBar {
         });
         
         mNhanVien.addActionListener(e -> {
-            if (frmLogin.chucVu.equals("1")) {
+            if (frmDangNhap.chucVu.equals("1")) {
                 parent.dispose();
                 new frmNhanVien();
             } else {
@@ -138,7 +138,7 @@ public class DefaultMenuBar {
                 "Xác nhận", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
                 parent.dispose();
-                frmLogin frmLogin = new frmLogin();
+                frmDangNhap frmLogin = new frmDangNhap();
                 frmLogin.setVisible(true);
             }
         });
