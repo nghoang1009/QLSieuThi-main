@@ -1,19 +1,17 @@
 package com.mycompany.qlst.frm;
 
 import javax.swing.*;
+
+import com.mycompany.qlst.Helpers.GlobalAccessPoint;
+import com.mycompany.qlst.dao.DangNhapDAO;
+
 import java.awt.*;
-import java.sql.*;
 
 public class frmDangNhap extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin, btnExit;
-    
-    
-    // Thông tin user đã đăng nhập
-    public static int maTK;
-    public static String tenTK;
-    public static String chucVu;
+
 
     public frmDangNhap() {
         super("Đăng nhập hệ thống");
@@ -105,43 +103,31 @@ public class frmDangNhap extends JFrame {
         String password = new String(txtPassword.getPassword()).trim();
         
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        try {
-            String sql = "SELECT maTK, tenTK, chucVu FROM taikhoan WHERE tenTK = ? AND matKhau = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
+        String chucVu = DangNhapDAO.kiemTraDangNhap(username, password);
+        
+        if (!chucVu.isEmpty()) {
+            var globalVariables = GlobalAccessPoint.getInstance();
+            globalVariables.chucVuNguoiDung = chucVu;
+            globalVariables.username = username;
+
+            String chucVuText = chucVu.equals("admin") ? "Admin" : "Nhân viên";
             
-            ResultSet rs = pstmt.executeQuery();
+            JOptionPane.showMessageDialog(null,
+                "Đăng nhập thành công!\nXin chào " + username + " (" + chucVuText + ")",
+                "Thành công", JOptionPane.INFORMATION_MESSAGE);
             
-            if (rs.next()) {
-                maTK = rs.getInt("maTK");
-                tenTK = rs.getString("tenTK");
-                chucVu = rs.getString("chucVu");
-                
-                String chucVuText = chucVu.equals("admin") ? "Admin" : "Nhân viên";
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Đăng nhập thành công!\nXin chào " + tenTK + " (" + chucVuText + ")", 
-                    "Thành công", JOptionPane.INFORMATION_MESSAGE);
-                
-                this.dispose();
-                openMainForm();
-                
-            } else {
-                JOptionPane.showMessageDialog(this, 
-                    "Tên đăng nhập hoặc mật khẩu không đúng!", 
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-                txtPassword.setText("");
-                txtUsername.requestFocus();
-            }
-            
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi đăng nhập: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            this.dispose();
+            openMainForm();
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                "Tên đăng nhập hoặc mật khẩu không đúng!", 
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+            txtPassword.setText("");
+            txtUsername.requestFocus();
         }
     }
 

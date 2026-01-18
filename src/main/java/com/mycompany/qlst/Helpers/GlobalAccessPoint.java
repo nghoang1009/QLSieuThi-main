@@ -2,11 +2,11 @@ package com.mycompany.qlst.Helpers;
 
 public class GlobalAccessPoint {
     private static final GlobalAccessPoint INSTANCE = new GlobalAccessPoint();
-    public String chucVuNguoiDung;
+    public String chucVuNguoiDung, username;
 
     private GlobalAccessPoint(){}
 
-    public GlobalAccessPoint getInstance() {
+    public static GlobalAccessPoint getInstance() {
         return INSTANCE;
     }
 }

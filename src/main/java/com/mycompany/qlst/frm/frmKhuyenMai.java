@@ -2,7 +2,6 @@ package com.mycompany.qlst.frm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -19,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -42,7 +40,7 @@ public class frmKhuyenMai extends JFrame {
         // Tạo MenuBar
         var menuBar = DefaultMenuBar.createMenuBar(this);
         setJMenuBar(menuBar);
-
+        
         
         // ============ Khuyến mãi ============
         var titleKM = new JLabel("QUẢN LÝ MÃ GIẢM GIÁ", JLabel.CENTER);
