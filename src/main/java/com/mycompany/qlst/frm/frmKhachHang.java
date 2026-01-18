@@ -1,6 +1,7 @@
 package com.mycompany.qlst.frm;
 
 import com.mycompany.qlst.dao.KhachHangDAO;
+import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.KhachHang;
 import com.mycompany.qlst.model.TaiKhoan;
 
@@ -24,7 +25,11 @@ public class frmKhachHang extends JFrame {
 
     public frmKhachHang() {
         super("Quản lý khách hàng");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
         
         // Khởi tạo DAO
         khachHangDAO = new KhachHangDAO();
@@ -130,8 +135,9 @@ public class frmKhachHang extends JFrame {
         JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
         add(jSplitPane);
 
-        setSize(900, 500);
+        pack();
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadAllKhachHang();

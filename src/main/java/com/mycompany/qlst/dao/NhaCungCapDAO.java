@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.NhaCungCap;
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class NhaCungCapDAO {
         List<NhaCungCap> list = new ArrayList<>();
         String sql = "SELECT maNCC, tenNCC, diaChi, thanhPho FROM nhacungcap ORDER BY maNCC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -36,7 +36,7 @@ public class NhaCungCapDAO {
     public NhaCungCap getNhaCungCapById(int maNCC) {
         String sql = "SELECT maNCC, tenNCC, diaChi, thanhPho FROM nhacungcap WHERE maNCC = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maNCC);
@@ -61,7 +61,7 @@ public class NhaCungCapDAO {
         List<NhaCungCap> list = new ArrayList<>();
         String sql = "SELECT maNCC, tenNCC, diaChi, thanhPho FROM nhacungcap WHERE thanhPho LIKE ? ORDER BY maNCC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + thanhPho + "%");
@@ -86,7 +86,7 @@ public class NhaCungCapDAO {
     public boolean themNhaCungCap(NhaCungCap ncc) {
         String sql = "INSERT INTO nhacungcap (tenNCC, diaChi, thanhPho) VALUES (?, ?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, ncc.getTenNCC());
@@ -105,7 +105,7 @@ public class NhaCungCapDAO {
     public boolean suaNhaCungCap(NhaCungCap ncc) {
         String sql = "UPDATE nhacungcap SET tenNCC=?, diaChi=?, thanhPho=? WHERE maNCC=?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, ncc.getTenNCC());
@@ -125,7 +125,7 @@ public class NhaCungCapDAO {
     public boolean xoaNhaCungCap(int maNCC) {
         String sql = "DELETE FROM nhacungcap WHERE maNCC = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maNCC);
@@ -142,7 +142,7 @@ public class NhaCungCapDAO {
         List<NhaCungCap> list = new ArrayList<>();
         String sql = "SELECT maNCC, tenNCC, diaChi, thanhPho FROM nhacungcap WHERE tenNCC LIKE ? ORDER BY maNCC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");
@@ -167,7 +167,7 @@ public class NhaCungCapDAO {
     public int demSanPham(int maNCC) {
         String sql = "SELECT COUNT(*) as soLuong FROM sanpham WHERE maNCC = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maNCC);

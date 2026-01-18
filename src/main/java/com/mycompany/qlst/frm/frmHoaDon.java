@@ -4,6 +4,7 @@ import com.mycompany.qlst.dao.HoaDonDAO;
 import com.mycompany.qlst.dao.ItemHoaDonDAO;
 import com.mycompany.qlst.dao.NhanVienDAO;
 import com.mycompany.qlst.dao.SanPhamDAO;
+import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.HoaDon;
 import com.mycompany.qlst.model.ItemHoaDon;
 import com.mycompany.qlst.model.NhanVien;
@@ -41,7 +42,11 @@ public class frmHoaDon extends JFrame {
 
     public frmHoaDon() {
         super("Quản lý hóa đơn");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
         
         // Khởi tạo DAO
         hoaDonDAO = new HoaDonDAO();
@@ -207,8 +212,9 @@ public class frmHoaDon extends JFrame {
         JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
         add(jSplitPane);
 
-        setSize(1000, 650);
+        pack();
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadNhanVien();

@@ -3,6 +3,7 @@ package com.mycompany.qlst.frm;
 import com.mycompany.qlst.dao.DanhMucDAO;
 import com.mycompany.qlst.dao.SanPhamDAO;
 import com.mycompany.qlst.model.DanhMuc;
+import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.SanPham;
 
 import javax.swing.*;
@@ -32,7 +33,11 @@ public class frmSanPham extends JFrame {
 
     public frmSanPham() {
         super("Quản lý sản phẩm");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
         
         // Khởi tạo DAO
         sanPhamDAO = new SanPhamDAO();
@@ -134,8 +139,9 @@ public class frmSanPham extends JFrame {
         JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
         add(jSplitPane);
 
-        setSize(900, 500);
+        pack();
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadDanhMuc();

@@ -1,13 +1,18 @@
-package com.mycompany.qlst.database;
+package com.mycompany.qlst.Helpers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+public class DatabaseConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/QLSieuThi";
+<<<<<<< HEAD:src/main/java/com/mycompany/qlst/Helpers/DatabaseConnector.java
+    private static final String USER = "alcen";
+    private static final String PASSWORD = "alcenium"; // Thay password của bạn
+=======
     private static final String USER = "root";
     private static final String PASSWORD = "";
+>>>>>>> 35d5952d9752823841b6046a6e23e426e771a534:src/main/java/com/mycompany/qlst/database/DatabaseConnection.java
     
     private static Connection connection = null;
 
@@ -17,7 +22,6 @@ public class DatabaseConnection {
             if (connection == null || connection.isClosed()) {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Kết nối database thành công!");
             }
         } catch (ClassNotFoundException e) {
             System.out.println("Không tìm thấy driver MySQL!");

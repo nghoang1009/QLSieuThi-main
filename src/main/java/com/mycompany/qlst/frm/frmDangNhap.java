@@ -4,30 +4,24 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 
-public class frmLogin extends JFrame {
+public class frmDangNhap extends JFrame {
     private JTextField txtUsername;
     private JPasswordField txtPassword;
     private JButton btnLogin, btnExit;
     
-    // Database connection
-    private Connection conn;
-    private final String DB_URL = "jdbc:mysql://localhost:3306/QLSieuThi";
-    private final String USER = "root";
-    private final String PASS = "";
     
     // Thông tin user đã đăng nhập
     public static int maTK;
     public static String tenTK;
     public static String chucVu;
 
-    public frmLogin() {
+    public frmDangNhap() {
         super("Đăng nhập hệ thống");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
-        connectDatabase();       
         initComponents();
         
-        setSize(400, 300);
+        pack();
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
@@ -105,22 +99,6 @@ public class frmLogin extends JFrame {
         txtUsername.addActionListener(e -> txtPassword.requestFocus());
     }
     
-    // Kết nối database
-    private void connectDatabase() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("Kết nối database thành công!");
-        } catch (ClassNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy driver MySQL!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            System.exit(0);
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi kết nối database!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
-            System.exit(0);
-        }
-    }
 
     private void Login() {
         String username = txtUsername.getText().trim();
@@ -144,7 +122,7 @@ public class frmLogin extends JFrame {
                 tenTK = rs.getString("tenTK");
                 chucVu = rs.getString("chucVu");
                 
-                String chucVuText = chucVu.equals("1") ? "Admin" : "Nhân viên";
+                String chucVuText = chucVu.equals("admin") ? "Admin" : "Nhân viên";
                 
                 JOptionPane.showMessageDialog(this, 
                     "Đăng nhập thành công!\nXin chào " + tenTK + " (" + chucVuText + ")", 
@@ -168,24 +146,10 @@ public class frmLogin extends JFrame {
     }
 
     private void openMainForm() {
-        frmTrangChu trangChu = new frmTrangChu();
-        trangChu.setVisible(true);
-    }
-
-    @Override
-    public void dispose() {
-        try {
-            if (conn != null && !conn.isClosed()) {
-                conn.close();
-                System.out.println("Đã đóng kết nối database!");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        super.dispose();
+        new frmTrangChu();
     }
     
     public static void main(String[] args) {
-        frmLogin loginForm = new frmLogin();
+        new frmDangNhap();
     }
 }

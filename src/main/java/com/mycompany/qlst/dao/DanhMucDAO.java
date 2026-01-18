@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.DanhMuc;
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ public class DanhMucDAO {
     // Lấy tất cả danh mục
     public List<DanhMuc> getAllDanhMuc() {
         List<DanhMuc> list = new ArrayList<>();
-        String sql = "SELECT maDM, tenDM FROM danhMuc";
+        String sql = "SELECT maDM, tenDM FROM danhmuc";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -32,9 +32,9 @@ public class DanhMucDAO {
     
     // Lấy danh mục theo mã
     public DanhMuc getDanhMucById(int maDM) {
-        String sql = "SELECT maDM, tenDM FROM danhMuc WHERE maDM = ?";
+        String sql = "SELECT maDM, tenDM FROM danhmuc WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maDM);
@@ -54,9 +54,9 @@ public class DanhMucDAO {
     
     // Thêm danh mục
     public boolean themDanhMuc(DanhMuc dm) {
-        String sql = "INSERT INTO danhMuc (tenDM) VALUES (?)";
+        String sql = "INSERT INTO danhmuc (tenDM) VALUES (?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, dm.getTenDM());
@@ -70,9 +70,9 @@ public class DanhMucDAO {
     
     // Sửa danh mục
     public boolean suaDanhMuc(DanhMuc dm) {
-        String sql = "UPDATE danhMuc SET tenDM = ? WHERE maDM = ?";
+        String sql = "UPDATE danhmuc SET tenDM = ? WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, dm.getTenDM());
@@ -87,9 +87,9 @@ public class DanhMucDAO {
     
     // Xóa danh mục
     public boolean xoaDanhMuc(int maDM) {
-        String sql = "DELETE FROM danhMuc WHERE maDM = ?";
+        String sql = "DELETE FROM danhmuc WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maDM);
@@ -103,9 +103,9 @@ public class DanhMucDAO {
     
     // Lấy mã danh mục theo tên
     public int getMaDMByTen(String tenDM) {
-        String sql = "SELECT maDM FROM danhMuc WHERE tenDM = ?";
+        String sql = "SELECT maDM FROM danhmuc WHERE tenDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, tenDM);

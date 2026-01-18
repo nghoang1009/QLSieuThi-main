@@ -4,7 +4,7 @@
  */
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.SanPham;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ public class SanPhamDAO {
     // Lấy tất cả sản phẩm
     public List<SanPham> getAllSanPham() {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanPham";
+        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -39,9 +39,9 @@ public class SanPhamDAO {
     
     // Lấy sản phẩm theo mã
     public SanPham getSanPhamById(int maSP) {
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanPham WHERE maSP = ?";
+        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maSP);
@@ -65,9 +65,9 @@ public class SanPhamDAO {
     // Lấy sản phẩm theo danh mục
     public List<SanPham> getSanPhamByDanhMuc(int maDM) {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanPham WHERE maDM = ?";
+        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maDM);
@@ -91,9 +91,9 @@ public class SanPhamDAO {
     
     // Thêm sản phẩm
     public boolean themSanPham(SanPham sp) {
-        String sql = "INSERT INTO sanPham (maDM, tenSP, gia, soLuong) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO sanpham (maDM, tenSP, gia, soLuong) VALUES (?, ?, ?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, sp.getMaDM());
@@ -111,9 +111,9 @@ public class SanPhamDAO {
     
     // Sửa sản phẩm
     public boolean suaSanPham(SanPham sp) {
-        String sql = "UPDATE sanPham SET maDM=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
+        String sql = "UPDATE sanpham SET maDM=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, sp.getMaDM());
@@ -132,9 +132,9 @@ public class SanPhamDAO {
     
     // Xóa sản phẩm
     public boolean xoaSanPham(int maSP) {
-        String sql = "DELETE FROM sanPham WHERE maSP = ?";
+        String sql = "DELETE FROM sanpham WHERE maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maSP);
@@ -149,9 +149,9 @@ public class SanPhamDAO {
     // Tìm kiếm sản phẩm theo tên
     public List<SanPham> timKiemSanPham(String keyword) {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanPham WHERE tenSP LIKE ?";
+        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE tenSP LIKE ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");

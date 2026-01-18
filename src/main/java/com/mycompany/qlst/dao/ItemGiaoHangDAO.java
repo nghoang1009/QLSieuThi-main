@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.ItemGiaoHang;
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ public class ItemGiaoHangDAO {
     public List<ItemGiaoHang> getItemsByGiaoHang(int maGiaoHang) {
         List<ItemGiaoHang> list = new ArrayList<>();
         String sql = "SELECT igh.maItemGiaoHang, igh.maSP, sp.tenSP, sp.gia, igh.soLuong " +
-                     "FROM item_giaoHang igh " +
-                     "INNER JOIN sanPham sp ON igh.maSP = sp.maSP " +
+                     "FROM item_giaohang igh " +
+                     "INNER JOIN sanpham sp ON igh.maSP = sp.maSP " +
                      "WHERE igh.maGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGiaoHang);
@@ -41,9 +41,9 @@ public class ItemGiaoHangDAO {
     
     // Thêm item vào đơn giao hàng
     public boolean themItem(ItemGiaoHang item) {
-        String sql = "INSERT INTO item_giaoHang (maGiaoHang, maSP, soLuong) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO item_giaohang (maGiaoHang, maSP, soLuong) VALUES (?, ?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, item.getMaGiaoHang());
@@ -60,9 +60,9 @@ public class ItemGiaoHangDAO {
     
     // Cập nhật số lượng item
     public boolean capNhatSoLuong(int maItemGiaoHang, int soLuongMoi) {
-        String sql = "UPDATE item_giaoHang SET soLuong = ? WHERE maItemGiaoHang = ?";
+        String sql = "UPDATE item_giaohang SET soLuong = ? WHERE maItemGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, soLuongMoi);
@@ -78,9 +78,9 @@ public class ItemGiaoHangDAO {
     
     // Xóa item khỏi đơn giao hàng
     public boolean xoaItem(int maItemGiaoHang) {
-        String sql = "DELETE FROM item_giaoHang WHERE maItemGiaoHang = ?";
+        String sql = "DELETE FROM item_giaohang WHERE maItemGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maItemGiaoHang);
@@ -94,9 +94,9 @@ public class ItemGiaoHangDAO {
     
     // Kiểm tra sản phẩm đã có trong đơn giao hàng chưa
     public boolean kiemTraTonTai(int maGiaoHang, int maSP) {
-        String sql = "SELECT COUNT(*) FROM item_giaoHang WHERE maGiaoHang = ? AND maSP = ?";
+        String sql = "SELECT COUNT(*) FROM item_giaohang wHERE maGiaoHang = ? AND maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGiaoHang);
