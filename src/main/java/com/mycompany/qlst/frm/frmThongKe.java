@@ -127,7 +127,7 @@ public class frmThongKe extends JFrame {
         jSplitPane.setDividerLocation(250);
         add(jSplitPane);
 
-        setSize(900, 500);
+        pack();
         setLocationRelativeTo(null);
         setVisible(true);
 

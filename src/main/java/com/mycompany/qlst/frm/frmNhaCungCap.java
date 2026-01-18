@@ -125,7 +125,7 @@ public class frmNhaCungCap extends JFrame {
         JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
         add(jSplitPane);
 
-        setSize(900, 500);
+        pack();
         setLocationRelativeTo(null);
         setVisible(true);
 
