@@ -16,10 +16,16 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 
+import com.mycompany.qlst.model.DefaultMenuBar;
+
 public class frmApplyKM extends JFrame {
     public frmApplyKM(String title) {
         super(title);
 
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
+        
         var font = new Font("Arial", Font.BOLD, 20);
 
         var titleApDung = new JLabel("ÁP DỤNG MÃ GIẢM GIÁ", JLabel.CENTER);

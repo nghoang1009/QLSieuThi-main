@@ -1,6 +1,7 @@
 package com.mycompany.qlst.frm;
 
 import com.mycompany.qlst.dao.ThongKeDAO;
+import com.mycompany.qlst.model.DefaultMenuBar;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -30,6 +31,10 @@ public class frmThongKe extends JFrame {
     public frmThongKe() {
         super("Thống kê");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
         
         // Khởi tạo DAO
         thongKeDAO = new ThongKeDAO();

@@ -1,6 +1,7 @@
 package com.mycompany.qlst.frm;
 
 import com.mycompany.qlst.dao.NhaCungCapDAO;
+import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.NhaCungCap;
 
 import javax.swing.*;
@@ -23,6 +24,10 @@ public class frmNhaCungCap extends JFrame {
     public frmNhaCungCap() {
         super("Quản lý nhà cung cấp");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
         
         // Khởi tạo DAO
         nccDAO = new NhaCungCapDAO();

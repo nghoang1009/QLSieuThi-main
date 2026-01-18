@@ -4,6 +4,7 @@ import com.mycompany.qlst.dao.GioHangDAO;
 import com.mycompany.qlst.dao.ItemGioHangDAO;
 import com.mycompany.qlst.dao.KhachHangDAO;
 import com.mycompany.qlst.dao.SanPhamDAO;
+import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.GioHang;
 import com.mycompany.qlst.model.ItemGioHang;
 import com.mycompany.qlst.model.KhachHang;
@@ -42,6 +43,10 @@ public class frmGioHang extends JFrame {
     public frmGioHang() {
         super("Quản lý giỏ hàng");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
         
         // Khởi tạo DAO
         gioHangDAO = new GioHangDAO();

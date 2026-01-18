@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import com.mycompany.qlst.dao.KhuyenMaiDAO;
+import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.KhuyenMai;
 import com.mycompany.qlst.model.khuyenMaiTableModel;
 
@@ -37,8 +38,12 @@ public class frmKhuyenMai extends JFrame {
 
     public frmKhuyenMai(String title) {
         super(title);
+
+        // Tạo MenuBar
+        var menuBar = DefaultMenuBar.createMenuBar(this);
+        setJMenuBar(menuBar);
+
         var tabs = new JTabbedPane();
-        
         var tabKM = new JPanel(new BorderLayout());
         var tabApDung = new JPanel(new BorderLayout());
         
