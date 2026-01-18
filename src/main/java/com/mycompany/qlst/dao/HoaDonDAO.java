@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.HoaDon;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class HoaDonDAO {
                      "INNER JOIN nhanvien nv ON hd.maNV = nv.maNV " +
                      "ORDER BY hd.maHoaDon DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -42,7 +42,7 @@ public class HoaDonDAO {
                      "INNER JOIN nhanvien nv ON hd.maNV = nv.maNV " +
                      "WHERE hd.maHoaDon = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maHoaDon);
@@ -72,7 +72,7 @@ public class HoaDonDAO {
                      "WHERE hd.maNV = ? " +
                      "ORDER BY hd.maHoaDon DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maNV);
@@ -97,7 +97,7 @@ public class HoaDonDAO {
     public boolean themHoaDon(HoaDon hd) {
         String sql = "INSERT INTO hoadon (maNV, ngayThanhToan) VALUES (?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, hd.getMaNV());
@@ -115,7 +115,7 @@ public class HoaDonDAO {
     public boolean xoaHoaDon(int maHoaDon) {
         String sql = "DELETE FROM hoadon WHERE maHoaDon = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maHoaDon);
@@ -136,7 +136,7 @@ public class HoaDonDAO {
                      "WHERE hd.maHoaDon LIKE ? OR nv.ten LIKE ? " +
                      "ORDER BY hd.maHoaDon DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");
@@ -165,7 +165,7 @@ public class HoaDonDAO {
              "FROM item_hoadon " +
              "WHERE maHoaDon = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maHoaDon);

@@ -4,7 +4,7 @@
  */
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.SanPham;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class SanPhamDAO {
         List<SanPham> list = new ArrayList<>();
         String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -41,7 +41,7 @@ public class SanPhamDAO {
     public SanPham getSanPhamById(int maSP) {
         String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maSP);
@@ -67,7 +67,7 @@ public class SanPhamDAO {
         List<SanPham> list = new ArrayList<>();
         String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maDM);
@@ -93,7 +93,7 @@ public class SanPhamDAO {
     public boolean themSanPham(SanPham sp) {
         String sql = "INSERT INTO sanpham (maDM, tenSP, gia, soLuong) VALUES (?, ?, ?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, sp.getMaDM());
@@ -113,7 +113,7 @@ public class SanPhamDAO {
     public boolean suaSanPham(SanPham sp) {
         String sql = "UPDATE sanpham SET maDM=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, sp.getMaDM());
@@ -134,7 +134,7 @@ public class SanPhamDAO {
     public boolean xoaSanPham(int maSP) {
         String sql = "DELETE FROM sanpham WHERE maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maSP);
@@ -151,7 +151,7 @@ public class SanPhamDAO {
         List<SanPham> list = new ArrayList<>();
         String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE tenSP LIKE ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");

@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.KhuyenMai;
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class KhuyenMaiDAO {
         List<KhuyenMai> list = new ArrayList<>();
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc FROM khuyenmai";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -37,7 +37,7 @@ public class KhuyenMaiDAO {
     public KhuyenMai getKhuyenMaiById(int maKhM) {
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc FROM khuyenmai WHERE maKhM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maKhM);
@@ -66,7 +66,7 @@ public class KhuyenMaiDAO {
                      "WHERE CURDATE() BETWEEN ngayHieuLuc AND ngayKetThuc " +
                      "ORDER BY maKhM DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -94,7 +94,7 @@ public class KhuyenMaiDAO {
                      "WHERE CURDATE() > ngayKetThuc " +
                      "ORDER BY maKhM DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -118,7 +118,7 @@ public class KhuyenMaiDAO {
     public int themKhuyenMai(KhuyenMai km) {
         String sql = "INSERT INTO khuyenmai (tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc) VALUES (?, ?, ?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             
             pstmt.setString(1, km.getTenKhM());
@@ -145,7 +145,7 @@ public class KhuyenMaiDAO {
     public boolean suaKhuyenMai(KhuyenMai km) {
         String sql = "UPDATE khuyenmai SET tenKhM=?, phanTramGiam=?, ngayHieuLuc=?, ngayKetThuc=? WHERE maKhM=?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, km.getTenKhM());
@@ -166,7 +166,7 @@ public class KhuyenMaiDAO {
     public boolean xoaKhuyenMai(int maKhM) {
         String sql = "DELETE FROM khuyenmai WHERE maKhM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maKhM);
@@ -184,7 +184,7 @@ public class KhuyenMaiDAO {
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc " +
                      "FROM khuyenmai WHERE tenKhM LIKE ? ORDER BY maKhM DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");

@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.ItemGiaoHang;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class ItemGiaoHangDAO {
                      "INNER JOIN sanpham sp ON igh.maSP = sp.maSP " +
                      "WHERE igh.maGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGiaoHang);
@@ -43,7 +43,7 @@ public class ItemGiaoHangDAO {
     public boolean themItem(ItemGiaoHang item) {
         String sql = "INSERT INTO item_giaohang (maGiaoHang, maSP, soLuong) VALUES (?, ?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, item.getMaGiaoHang());
@@ -62,7 +62,7 @@ public class ItemGiaoHangDAO {
     public boolean capNhatSoLuong(int maItemGiaoHang, int soLuongMoi) {
         String sql = "UPDATE item_giaohang SET soLuong = ? WHERE maItemGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, soLuongMoi);
@@ -80,7 +80,7 @@ public class ItemGiaoHangDAO {
     public boolean xoaItem(int maItemGiaoHang) {
         String sql = "DELETE FROM item_giaohang WHERE maItemGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maItemGiaoHang);
@@ -96,7 +96,7 @@ public class ItemGiaoHangDAO {
     public boolean kiemTraTonTai(int maGiaoHang, int maSP) {
         String sql = "SELECT COUNT(*) FROM item_giaohang wHERE maGiaoHang = ? AND maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGiaoHang);

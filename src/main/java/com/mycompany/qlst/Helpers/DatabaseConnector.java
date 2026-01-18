@@ -1,10 +1,10 @@
-package com.mycompany.qlst.database;
+package com.mycompany.qlst.Helpers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DatabaseConnection {
+public class DatabaseConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/QLSieuThi";
     private static final String USER = "alcen";
     private static final String PASSWORD = "alcenium"; // Thay password của bạn

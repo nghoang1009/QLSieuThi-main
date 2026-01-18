@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.NhanVien;
 import com.mycompany.qlst.model.TaiKhoan;
 import java.sql.*;
@@ -19,7 +19,7 @@ public class NhanVienDAO {
         List<NhanVien> list = new ArrayList<>();
         String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -44,7 +44,7 @@ public class NhanVienDAO {
     public NhanVien getNhanVienById(int maNV) {
         String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE maNV = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maNV);
@@ -77,7 +77,7 @@ public class NhanVienDAO {
         List<NhanVien> list = new ArrayList<>();
         String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE gioiTinh = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, gioiTinh);
@@ -104,7 +104,7 @@ public class NhanVienDAO {
     public boolean themNhanVien(NhanVien nv, TaiKhoan tk) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Thêm tài khoản trước
@@ -159,7 +159,7 @@ public class NhanVienDAO {
     public boolean suaNhanVien(NhanVien nv, TaiKhoan tk) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Update tài khoản
@@ -220,7 +220,7 @@ public class NhanVienDAO {
         List<NhanVien> list = new ArrayList<>();
         String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE ten LIKE ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");

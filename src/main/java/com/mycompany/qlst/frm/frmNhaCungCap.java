@@ -23,7 +23,7 @@ public class frmNhaCungCap extends JFrame {
 
     public frmNhaCungCap() {
         super("Quản lý nhà cung cấp");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         // Tạo MenuBar
         var menuBar = DefaultMenuBar.createMenuBar(this);

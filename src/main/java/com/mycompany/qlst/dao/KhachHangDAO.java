@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.KhachHang;
 import com.mycompany.qlst.model.TaiKhoan;
 import java.sql.*;
@@ -19,7 +19,7 @@ public class KhachHangDAO {
         List<KhachHang> list = new ArrayList<>();
         String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -42,7 +42,7 @@ public class KhachHangDAO {
     public KhachHang getKhachHangById(int maKH) {
         String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE maKH = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maKH);
@@ -73,7 +73,7 @@ public class KhachHangDAO {
         List<KhachHang> list = new ArrayList<>();
         String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE diachi LIKE ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + khuVuc + "%");
@@ -98,7 +98,7 @@ public class KhachHangDAO {
     public boolean themKhachHang(KhachHang kh, TaiKhoan tk) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Thêm tài khoản trước
@@ -151,7 +151,7 @@ public class KhachHangDAO {
     public boolean suaKhachHang(KhachHang kh, TaiKhoan tk) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Update tài khoản
@@ -210,7 +210,7 @@ public class KhachHangDAO {
         List<KhachHang> list = new ArrayList<>();
         String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE ten LIKE ? OR sdt LIKE ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");

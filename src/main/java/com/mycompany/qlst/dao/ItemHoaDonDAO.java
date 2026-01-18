@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.ItemHoaDon;
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
                  "LEFT JOIN sanpham sp ON ihd.tenSP = sp.tenSP " +
                  "WHERE ihd.maHoaDon = ?";
     
-    try (Connection conn = DatabaseConnection.getConnection();
+    try (Connection conn = DatabaseConnector.getConnection();
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
         
         pstmt.setInt(1, maHoaDon);
@@ -53,7 +53,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     public boolean themItem(ItemHoaDon item) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Lấy thông tin sản phẩm từ database
@@ -119,7 +119,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     public boolean capNhatSoLuong(int maItemHoaDon, int maSP, int soLuongCu, int soLuongMoi) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Cập nhật số lượng item
@@ -169,7 +169,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
     public boolean xoaItem(int maItemHoaDon, int maSP, int soLuong) {
         Connection conn = null;
         try {
-            conn = DatabaseConnection.getConnection();
+            conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
             // Xóa item
@@ -219,7 +219,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
                     "INNER JOIN sanpham sp ON ihd.tenSP = sp.tenSP " +
                     "WHERE ihd.maHoaDon = ? AND sp.maSP = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maHoaDon);

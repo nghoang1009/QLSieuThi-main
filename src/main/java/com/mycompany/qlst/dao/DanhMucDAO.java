@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.DanhMuc;
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class DanhMucDAO {
         List<DanhMuc> list = new ArrayList<>();
         String sql = "SELECT maDM, tenDM FROM danhmuc";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -34,7 +34,7 @@ public class DanhMucDAO {
     public DanhMuc getDanhMucById(int maDM) {
         String sql = "SELECT maDM, tenDM FROM danhmuc WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maDM);
@@ -56,7 +56,7 @@ public class DanhMucDAO {
     public boolean themDanhMuc(DanhMuc dm) {
         String sql = "INSERT INTO danhmuc (tenDM) VALUES (?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, dm.getTenDM());
@@ -72,7 +72,7 @@ public class DanhMucDAO {
     public boolean suaDanhMuc(DanhMuc dm) {
         String sql = "UPDATE danhmuc SET tenDM = ? WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, dm.getTenDM());
@@ -89,7 +89,7 @@ public class DanhMucDAO {
     public boolean xoaDanhMuc(int maDM) {
         String sql = "DELETE FROM danhmuc WHERE maDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maDM);
@@ -105,7 +105,7 @@ public class DanhMucDAO {
     public int getMaDMByTen(String tenDM) {
         String sql = "SELECT maDM FROM danhmuc WHERE tenDM = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, tenDM);

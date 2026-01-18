@@ -1,6 +1,6 @@
 package com.mycompany.qlst.dao;
 
-import com.mycompany.qlst.database.DatabaseConnection;
+import com.mycompany.qlst.Helpers.DatabaseConnector;
 import com.mycompany.qlst.model.GiaoHang;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class GiaoHangDAO {
                      "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "ORDER BY gh.maGiaoHang DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
@@ -43,7 +43,7 @@ public class GiaoHangDAO {
                      "INNER JOIN khachhang kh ON gh.maKH = kh.maKH " +
                      "WHERE gh.maGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGiaoHang);
@@ -74,7 +74,7 @@ public class GiaoHangDAO {
                      "WHERE gh.tinhTrang = ? " +
                      "ORDER BY gh.maGiaoHang DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, tinhTrang);
@@ -100,7 +100,7 @@ public class GiaoHangDAO {
     public boolean themGiaoHang(GiaoHang gh) {
         String sql = "INSERT INTO giaohang (maKH, ngayTao, tinhTrang) VALUES (?, ?, ?)";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, gh.getMaKH());
@@ -119,7 +119,7 @@ public class GiaoHangDAO {
     public boolean capNhatTinhTrang(int maGiaoHang, String tinhTrang) {
         String sql = "UPDATE giaohang SET tinhTrang = ? WHERE maGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, tinhTrang);
@@ -137,7 +137,7 @@ public class GiaoHangDAO {
     public boolean xoaGiaoHang(int maGiaoHang) {
         String sql = "DELETE FROM giaohang WHERE maGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGiaoHang);
@@ -158,7 +158,7 @@ public class GiaoHangDAO {
                      "WHERE kh.ten LIKE ? " +
                      "ORDER BY gh.maGiaoHang DESC";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, "%" + keyword + "%");
@@ -188,7 +188,7 @@ public class GiaoHangDAO {
                      "INNER JOIN sanpham sp ON igh.maSP = sp.maSP " +
                      "WHERE igh.maGiaoHang = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, maGiaoHang);
