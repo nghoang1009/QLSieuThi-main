@@ -66,3 +66,8 @@ target/maven-archiver/pom.properties
 target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
 target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
 target/QLST-1.0-SNAPSHOT.jar
+target/classes/com/mycompany/qlst/Helpers/DatabaseConnection.class
+target/classes/com/mycompany/qlst/dao/DangNhapDAO.class
+target/classes/com/mycompany/qlst/Helpers/GlobalAccessPoint.class
+target/classes/com/mycompany/qlst/Helpers/DatabaseConnector.class
+target/classes/com/mycompany/qlst/frm/frmDangNhap.class
