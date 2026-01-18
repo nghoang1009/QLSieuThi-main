@@ -96,12 +96,12 @@ CREATE TABLE khachhang (
   CONSTRAINT khachhang_ibfk_1 FOREIGN KEY (maKH) REFERENCES taikhoan (maTK) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO khachhang (maKH, ten, sdt, diachi) VALUES
-(7, 'Nguyễn Văn An', '0912345678', '123 Phố Huế, Hai Bà Trưng, Hà Nội'),
-(8, 'Trần Thị Bình', '0923456789', '45 Đường Láng, Đống Đa, Hà Nội'),
-(9, 'Lê Văn Cường', '0934567890', '78 Nguyễn Trãi, Thanh Xuân, Hà Nội'),
-(10, 'Phạm Thị Dung', '0945678901', '12 Giải Phóng, Hoàng Mai, Hà Nội'),
-(11, 'Hoàng Văn Em', '0956789012', '234 Trường Chinh, Thanh Xuân, Hà Nội');
+INSERT INTO khachhang (ten, sdt, diachi) VALUES
+('Nguyễn Văn An', '0912345678', '123 Phố Huế, Hai Bà Trưng, Hà Nội'),
+('Trần Thị Bình', '0923456789', '45 Đường Láng, Đống Đa, Hà Nội'),
+('Lê Văn Cường', '0934567890', '78 Nguyễn Trãi, Thanh Xuân, Hà Nội'),
+('Phạm Thị Dung', '0945678901', '12 Giải Phóng, Hoàng Mai, Hà Nội'),
+('Hoàng Văn Em', '0956789012', '234 Trường Chinh, Thanh Xuân, Hà Nội');
 
 
 -- =================== SẢN PHẨM ===================
@@ -193,10 +193,10 @@ CREATE TABLE giohang (
   CONSTRAINT giohang_ibfk_1 FOREIGN KEY (maKH) REFERENCES khachhang (maKH) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO giohang (maGioHang, maKH, ngayTao) VALUES
-(1, 7, '2024-12-20'),
-(2, 8, '2024-12-21'),
-(3, 9, '2024-12-22');
+INSERT INTO giohang (maKH, ngayTao) VALUES
+(1, '2024-12-20'),
+(2, '2024-12-21'),
+(3, '2024-12-22');
 
 
 -- =================== ĐỒ TRONG GIỎ HÀNG ===================
@@ -229,10 +229,10 @@ CREATE TABLE giaohang (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO giaohang (maGiaoHang, maKH, ngayTao, tinhTrang) VALUES
-(1, 7, '2024-12-18', 'Đã giao'),
-(2, 8, '2024-12-19', 'Đang giao'),
-(3, 10, '2024-12-21', 'Chờ xử lý'),
-(4, 11, '2024-12-22', 'Đã giao');
+(1, 1, '2024-12-18', 'Đã giao'),
+(2, 2, '2024-12-19', 'Đang giao'),
+(3, 3, '2024-12-21', 'Chờ xử lý'),
+(4, 4, '2024-12-22', 'Đã giao');
 
 
 -- =================== ĐỒ ĐƯỢC GIAO ===================

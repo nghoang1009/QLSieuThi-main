@@ -11,6 +11,7 @@ import com.mycompany.qlst.frm.frmGioHang;
 import com.mycompany.qlst.frm.frmHoaDon;
 import com.mycompany.qlst.frm.frmKhachHang;
 import com.mycompany.qlst.frm.frmKhuyenMai;
+import com.mycompany.qlst.Helpers.GlobalAccessPoint;
 import com.mycompany.qlst.frm.frmDangNhap;
 import com.mycompany.qlst.frm.frmNhaCungCap;
 import com.mycompany.qlst.frm.frmNhanVien;
@@ -19,6 +20,7 @@ import com.mycompany.qlst.frm.frmThongKe;
 
 public class DefaultMenuBar {
     public static JMenuBar createMenuBar(JFrame parent) {
+        var globalVariables = GlobalAccessPoint.getInstance();
         JMenuBar menuBar = new JMenuBar();
         
         // Menu Quản lý
@@ -37,7 +39,7 @@ public class DefaultMenuBar {
         menuQuanLy.add(mKhuyenMai);
         
         // Phân quyền: Chỉ Admin mới xem được Nhân viên
-        if (!frmDangNhap.chucVu.equals("1")) {
+        if (!globalVariables.chucVuNguoiDung.equals("admin")) {
             mNhanVien.setEnabled(false);
         }
         
@@ -61,7 +63,7 @@ public class DefaultMenuBar {
    
         
         // Phân quyền: Chỉ Admin mới xem được Thống kê
-        if (!frmDangNhap.chucVu.equals("1")) {
+        if (!globalVariables.chucVuNguoiDung.equals("admin")) {
             menuThongKe.setEnabled(false);
         }
         
@@ -92,14 +94,8 @@ public class DefaultMenuBar {
         });
         
         mNhanVien.addActionListener(e -> {
-            if (frmDangNhap.chucVu.equals("1")) {
                 parent.dispose();
                 new frmNhanVien();
-            } else {
-                JOptionPane.showMessageDialog(null, 
-                    "Bạn không có quyền truy cập!", 
-                    "Thông báo", JOptionPane.WARNING_MESSAGE);
-            }
         });
         
         mHoaDon.addActionListener(e -> {

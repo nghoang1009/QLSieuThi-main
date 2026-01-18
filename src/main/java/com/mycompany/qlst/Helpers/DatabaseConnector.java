@@ -6,13 +6,8 @@ import java.sql.SQLException;
 
 public class DatabaseConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/QLSieuThi";
-<<<<<<< HEAD:src/main/java/com/mycompany/qlst/Helpers/DatabaseConnector.java
-    private static final String USER = "alcen";
-    private static final String PASSWORD = "alcenium"; // Thay password của bạn
-=======
     private static final String USER = "root";
-    private static final String PASSWORD = "";
->>>>>>> 35d5952d9752823841b6046a6e23e426e771a534:src/main/java/com/mycompany/qlst/database/DatabaseConnection.java
+    private static final String PASSWORD = ""; // Thay password của bạn
     
     private static Connection connection = null;
 

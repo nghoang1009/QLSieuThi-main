@@ -9,9 +9,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.mycompany.qlst.Helpers.GlobalAccessPoint;
 import com.mycompany.qlst.model.DefaultMenuBar;
 
 public class frmTrangChu extends JFrame {
+    private GlobalAccessPoint globalVariables = GlobalAccessPoint.getInstance();
     
     public frmTrangChu() {
         super("Hệ thống quản lý siêu thị");
@@ -33,8 +35,8 @@ public class frmTrangChu extends JFrame {
         JPanel headerPanel = new JPanel(new BorderLayout());
         JLabel lblTitle = new JLabel("HỆ THỐNG QUẢN LÝ SIÊU THỊ");
 
-        String chucVuText = frmDangNhap.chucVu.equals("1") ? "Admin" : "Nhân viên";
-        JLabel lblUserInfo = new JLabel("Xin chào: " + frmDangNhap.tenTK + " (" + chucVuText + ")");
+        String chucVuText = GlobalAccessPoint.getInstance().chucVuNguoiDung.equals("admin") ? "Admin" : "Nhân viên";
+        JLabel lblUserInfo = new JLabel("Xin chào: " + globalVariables.username + " (" + chucVuText + ")");
 
 
         headerPanel.setBackground(new Color(41, 128, 185));
