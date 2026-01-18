@@ -15,7 +15,7 @@ public class frmTrangChu extends JFrame {
     
     public frmTrangChu() {
         super("Hệ thống quản lý siêu thị");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         // Thiết lập giao diện
         initComponents();

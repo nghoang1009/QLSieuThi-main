@@ -146,7 +146,7 @@ public class frmKhuyenMai extends JFrame {
         add(tabs);
         setSize(950, 550);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setVisible(true);
 

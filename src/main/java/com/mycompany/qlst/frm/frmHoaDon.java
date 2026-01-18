@@ -42,7 +42,7 @@ public class frmHoaDon extends JFrame {
 
     public frmHoaDon() {
         super("Quản lý hóa đơn");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         // Tạo MenuBar
         var menuBar = DefaultMenuBar.createMenuBar(this);
@@ -212,8 +212,9 @@ public class frmHoaDon extends JFrame {
         JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
         add(jSplitPane);
 
-        setSize(1000, 650);
+        setSize(900, 500);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadNhanVien();

@@ -30,7 +30,7 @@ public class frmThongKe extends JFrame {
 
     public frmThongKe() {
         super("Thống kê");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         // Tạo MenuBar
         var menuBar = DefaultMenuBar.createMenuBar(this);
@@ -127,8 +127,9 @@ public class frmThongKe extends JFrame {
         jSplitPane.setDividerLocation(250);
         add(jSplitPane);
 
-        setSize(1000, 600);
+        setSize(900, 500);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         thongKeTongQuan();

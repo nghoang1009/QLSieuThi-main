@@ -22,7 +22,7 @@ public class frmLogin extends JFrame {
 
     public frmLogin() {
         super("Đăng nhập hệ thống");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         connectDatabase();
         initComponents();
@@ -143,7 +143,7 @@ public class frmLogin extends JFrame {
                 tenTK = rs.getString("tenTK");
                 chucVu = rs.getString("chucVu");
                 
-                String chucVuText = chucVu.equals("1") ? "Admin" : "Nhân viên";
+                String chucVuText = chucVu.equals("admin") ? "Admin" : "Nhân viên";
                 
                 JOptionPane.showMessageDialog(this, 
                     "Đăng nhập thành công!\nXin chào " + tenTK + " (" + chucVuText + ")", 
@@ -167,8 +167,7 @@ public class frmLogin extends JFrame {
     }
 
     private void openMainForm() {
-        frmTrangChu trangChu = new frmTrangChu();
-        trangChu.setVisible(true);
+        new frmTrangChu();
     }
 
     @Override

@@ -82,19 +82,19 @@ public class DefaultMenuBar {
         
         // Event handlers
         mSanPham.addActionListener(e -> {
-            frmSanPham frmSanPham = new frmSanPham();
-            frmSanPham.setVisible(true);
+            parent.dispose();
+            new frmSanPham();
         });
         
         mKhachHang.addActionListener(e -> {
-            frmKhachHang frmKhachHang = new frmKhachHang();
-            frmKhachHang.setVisible(true);
+            parent.dispose();
+            new frmKhachHang();
         });
         
         mNhanVien.addActionListener(e -> {
             if (frmLogin.chucVu.equals("1")) {
-                frmNhanVien frmNhanVien = new frmNhanVien();
-                frmNhanVien.setVisible(true);
+                parent.dispose();
+                new frmNhanVien();
             } else {
                 JOptionPane.showMessageDialog(null, 
                     "Bạn không có quyền truy cập!", 
@@ -103,33 +103,33 @@ public class DefaultMenuBar {
         });
         
         mHoaDon.addActionListener(e -> {
-            frmHoaDon frmHoaDon = new frmHoaDon();
-            frmHoaDon.setVisible(true);
+            parent.dispose();
+            new frmHoaDon();
         });
         
         mGioHang.addActionListener(e -> {
-            frmGioHang frmGioHang = new frmGioHang();
-            frmGioHang.setVisible(true);
+            parent.dispose();
+            new frmGioHang();
         });
         
         mGiaoHang.addActionListener(e -> {
-            frmGiaoHang frmGiaoHang = new frmGiaoHang();
-            frmGiaoHang.setVisible(true);
+            parent.dispose();
+            new frmGiaoHang();
         });
         
         mThongKe.addActionListener(e -> {
-            frmThongKe frmThongKe = new frmThongKe();
-            frmThongKe.setVisible(true);
+            parent.dispose();
+            new frmThongKe();
         });
         
         mKhuyenMai.addActionListener(e -> {
-            frmKhuyenMai frmKhuyenMai = new frmKhuyenMai("Tạo khuyến mãi mới!");
-            frmKhuyenMai.setVisible(true);
+            parent.dispose();
+            new frmKhuyenMai("Tạo khuyến mãi mới!");
         });
 
         mNhaCungCap.addActionListener(e ->{
-            frmNhaCungCap frmNhaCungCap = new frmNhaCungCap();
-            frmNhaCungCap.setVisible(true);
+            parent.dispose();
+            new frmNhaCungCap();
         });
         
         mDangXuat.addActionListener(e -> {

@@ -73,8 +73,9 @@ public class frmApplyKM extends JFrame {
         pnApDungButton.add(btnReloadApDung);
         this.add(pnApDungButton, BorderLayout.SOUTH);
 
-        setSize(950, 550);
+        setSize(900, 500);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 }

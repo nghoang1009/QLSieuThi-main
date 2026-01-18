@@ -25,7 +25,7 @@ public class frmKhachHang extends JFrame {
 
     public frmKhachHang() {
         super("Quản lý khách hàng");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         // Tạo MenuBar
         var menuBar = DefaultMenuBar.createMenuBar(this);
@@ -137,6 +137,7 @@ public class frmKhachHang extends JFrame {
 
         setSize(900, 500);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadAllKhachHang();

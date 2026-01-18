@@ -33,7 +33,7 @@ public class frmSanPham extends JFrame {
 
     public frmSanPham() {
         super("Quản lý sản phẩm");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         
         // Tạo MenuBar
         var menuBar = DefaultMenuBar.createMenuBar(this);
@@ -141,6 +141,7 @@ public class frmSanPham extends JFrame {
 
         setSize(900, 500);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadDanhMuc();

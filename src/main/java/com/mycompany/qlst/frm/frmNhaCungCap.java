@@ -125,8 +125,9 @@ public class frmNhaCungCap extends JFrame {
         JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
         add(jSplitPane);
 
-        setSize(900, 550);
+        setSize(900, 500);
         setLocationRelativeTo(null);
+        setVisible(true);
 
         // Load dữ liệu ban đầu
         loadAllNhaCungCap();
