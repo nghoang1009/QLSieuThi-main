@@ -31,7 +31,7 @@ public class KhuyenMai {
     }
 
     // Getters và Setters
-    public int getMaKhM() {
+    public Integer getMaKhM() {
         return maKhM;
     }
 
@@ -47,7 +47,7 @@ public class KhuyenMai {
         this.tenKhM = tenKhM;
     }
 
-    public int getPhanTramGiam() {
+    public Integer getPhanTramGiam() {
         return phanTramGiam;
     }
 
@@ -71,14 +71,21 @@ public class KhuyenMai {
         this.ngayKetThuc = ngayKetThuc;
     }
 
+    public Object get(int index) {
+        switch (index) {
+            case 0: return maKhM;
+            case 1: return tenKhM;
+            case 2: return phanTramGiam;
+            case 3: return ngayHieuLuc;
+            case 4: return ngayKetThuc;
+        
+            default:
+                return null;
+        }
+    }
+
     @Override
     public String toString() {
-        return "KhuyenMai{" +
-                "maKhM=" + maKhM +
-                ", tenKhM='" + tenKhM + '\'' +
-                ", phanTramGiam=" + phanTramGiam +
-                ", ngayHieuLuc=" + ngayHieuLuc +
-                ", ngayKetThuc=" + ngayKetThuc +
-                '}';
+        return tenKhM;
     }
 }

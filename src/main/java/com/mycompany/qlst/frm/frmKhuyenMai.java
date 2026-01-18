@@ -1,395 +1,282 @@
 package com.mycompany.qlst.frm;
 
-import com.mycompany.qlst.dao.KhuyenMaiDAO;
-import com.mycompany.qlst.model.KhuyenMai;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
+import com.mycompany.qlst.dao.KhuyenMaiDAO;
+import com.mycompany.qlst.model.KhuyenMai;
+import com.mycompany.qlst.model.khuyenMaiTableModel;
+
 public class frmKhuyenMai extends JFrame {
-    private JTable khuyenMaiTable;
-    private DefaultTableModel tableModel;
-    private JTextField txtMaKhM, txtTenKhM, txtPhanTramGiam, txtNgayHieuLuc, txtNgayKetThuc;
-    private JList<String> listTrangThai;
-    private DefaultListModel<String> trangThaiListModel;
-    
-    // DAO
-    private KhuyenMaiDAO khuyenMaiDAO;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private List<KhuyenMai> listKhuyenMai;
+    private khuyenMaiTableModel tableModel;
+    private KhuyenMaiDAO khuyenMaiDAO = new KhuyenMaiDAO();
 
-    public frmKhuyenMai() {
-        super("Quản lý khuyến mãi");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    private JTextField tfMaKM, tfTenKM, tfPhanTramGiam, tfDayNHL, tfMonthNHL, tfYearNHL, tfDayNKT, tfMonthNKT, tfYearNKT;
+
+    public frmKhuyenMai(String title) {
+        super(title);
+        var tabs = new JTabbedPane();
         
-        // Khởi tạo DAO
-        khuyenMaiDAO = new KhuyenMaiDAO();
-
-        JLabel lbTitle = new JLabel("QUẢN LÝ KHUYẾN MÃI", JLabel.CENTER);
-        lbTitle.setForeground(Color.blue);
-        lbTitle.setFont(new Font("Arial", Font.BOLD, 25));
-        add(lbTitle, BorderLayout.PAGE_START);
-
-        Border border = BorderFactory.createLineBorder(Color.BLACK, 1);
-
-        //Panel Left
-        JPanel pnLeft = new JPanel(new BorderLayout());
-        trangThaiListModel = new DefaultListModel<>();
-        trangThaiListModel.addElement("Tất cả khuyến mãi");
-        trangThaiListModel.addElement("Đang hiệu lực");
-        trangThaiListModel.addElement("Đã hết hạn");
+        var tabKM = new JPanel(new BorderLayout());
+        var tabApDung = new JPanel(new BorderLayout());
         
-        listTrangThai = new JList<>(trangThaiListModel);
-        JScrollPane scrollPane = new JScrollPane(listTrangThai);
-        scrollPane.setBorder(new TitledBorder(border, "Lọc theo trạng thái"));
+        // ============ Khuyến mãi ============
+        tabs.addTab("Mã giảm giá", tabKM);
+        tabs.addTab("Áp dụng", tabApDung);
 
-        JPanel pnBtn1 = new JPanel();
-        JButton btnRefresh = new JButton("Làm mới");
-        JButton btnSearch = new JButton("Tìm kiếm");
+        var titleKM = new JLabel("QUẢN LÝ MÃ GIẢM GIÁ", JLabel.CENTER);
+        var font = new Font("Arial", Font.BOLD, 20);
+
+        listKhuyenMai = new ArrayList<>();
+        tableModel = new khuyenMaiTableModel(listKhuyenMai);
+        loadAllKM();
+
+        var tableKM = new JTable(tableModel);
+        var scrollTableKM = new JScrollPane(tableKM);
+
+        var eastLayout = new JPanel(new BorderLayout());
+        var pnKMTextField = new JPanel(new GridBagLayout());
+        var lblMaKM = new JLabel("Mã khuyến mãi:");
+        var lblTenKM = new JLabel("Tên khuyến mãi:");
+        var lblPhanTramGiam = new JLabel("Phần trăm giảm(%):");
+        var lblNgayHieuLuc = new JLabel("Ngày hiệu lực:");
+        var lblNgayKetThuc = new JLabel("Ngày kết thúc:");
+
+        tfMaKM = new JTextField(20);
+        tfTenKM = new JTextField(20);
+        tfPhanTramGiam = new JTextField(20);
+
+        var pnNgayHieuLuc = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        tfDayNHL = new JTextField(2);
+        tfMonthNHL = new JTextField(2);
+        tfYearNHL = new JTextField(4);
+
+        var pnNgayKetThuc = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        tfDayNKT = new JTextField(2);
+        tfMonthNKT = new JTextField(2);
+        tfYearNKT = new JTextField(4);
+
+        var pnKMButton = new JPanel();
+        var btnAddKM = new JButton("Thêm");
+        var btnEditKM = new JButton("Sửa");
+        var btnDeleteKM = new JButton("Xóa");
+        var btnClearKM = new JButton("Clear");
+
+        // ============ Áp dụng ============
         
-        pnBtn1.add(btnRefresh);
-        pnBtn1.add(btnSearch);
 
-        pnLeft.add(scrollPane, BorderLayout.CENTER);
-        pnLeft.add(pnBtn1, BorderLayout.PAGE_END);
 
-        //Panel Right
-        JPanel pnRight = new JPanel(new BorderLayout());
+        // ============ Chỉnh sửa các thành phần ============
+        tfMaKM.setEditable(false);
 
-        JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBorder(BorderFactory.createTitledBorder("Thông tin chi tiết"));
+        tableKM.setFillsViewportHeight(true);
+        titleKM.setFont(font);
+        titleKM.setForeground(Color.BLUE);
 
-        String[] columns = {"Mã KM", "Tên khuyến mãi", "% Giảm", "Ngày hiệu lực", "Ngày kết thúc"};
-        tableModel = new DefaultTableModel(columns, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        khuyenMaiTable = new JTable(tableModel);
-        JScrollPane tableScrollPane = new JScrollPane(khuyenMaiTable);
-        tablePanel.add(tableScrollPane);
-        pnRight.add(tablePanel, BorderLayout.PAGE_START);
-        tableScrollPane.setPreferredSize(new Dimension(tableScrollPane.getWidth(), 250));
-
-        JPanel pnTT = new JPanel(new GridLayout(5, 2, 5, 3));
-        pnTT.setBorder(new TitledBorder(border, "Thông tin khuyến mãi"));
+        tableKM.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        JLabel lbMaKhM = new JLabel("Mã khuyến mãi:");
-        JLabel lbTenKhM = new JLabel("Tên khuyến mãi:");
-        JLabel lbPhanTramGiam = new JLabel("Phần trăm giảm (%):");
-        JLabel lbNgayHieuLuc = new JLabel("Ngày hiệu lực (yyyy-MM-dd):");
-        JLabel lbNgayKetThuc = new JLabel("Ngày kết thúc (yyyy-MM-dd):");
+        // ============ Hiển thị lên màn hình ============
+        // ============ Khuyến mãi ============
+        tabKM.add(titleKM, BorderLayout.NORTH);
+        tabKM.add(scrollTableKM, BorderLayout.CENTER);
+        tabKM.add(eastLayout, BorderLayout.EAST);
 
-        txtMaKhM = new JTextField(30);
-        txtMaKhM.setEditable(false);
-        txtTenKhM = new JTextField(30);
-        txtPhanTramGiam = new JTextField(30);
-        txtNgayHieuLuc = new JTextField(30);
-        txtNgayKetThuc = new JTextField(30);
+        pnKMButton.add(btnAddKM);
+        pnKMButton.add(btnEditKM);
+        pnKMButton.add(btnDeleteKM);
+        pnKMButton.add(btnClearKM);
+        eastLayout.add(pnKMButton, BorderLayout.SOUTH);
 
-        pnTT.add(lbMaKhM);
-        pnTT.add(txtMaKhM);
-        pnTT.add(lbTenKhM);
-        pnTT.add(txtTenKhM);
-        pnTT.add(lbPhanTramGiam);
-        pnTT.add(txtPhanTramGiam);
-        pnTT.add(lbNgayHieuLuc);
-        pnTT.add(txtNgayHieuLuc);
-        pnTT.add(lbNgayKetThuc);
-        pnTT.add(txtNgayKetThuc);
+        pnNgayHieuLuc.add(tfDayNHL);
+        pnNgayHieuLuc.add(new JLabel(" / "));
+        pnNgayHieuLuc.add(tfMonthNHL);
+        pnNgayHieuLuc.add(new JLabel(" / "));
+        pnNgayHieuLuc.add(tfYearNHL);
 
-        pnRight.add(pnTT, BorderLayout.CENTER);
+        pnNgayKetThuc.add(tfDayNKT);
+        pnNgayKetThuc.add(new JLabel(" / "));
+        pnNgayKetThuc.add(tfMonthNKT);
+        pnNgayKetThuc.add(new JLabel(" / "));
+        pnNgayKetThuc.add(tfYearNKT);
 
-        //Panel Btn2
-        JPanel pnBtn2 = new JPanel();
-        JButton btAdd = new JButton("Thêm");
-        JButton btUpdate = new JButton("Sửa");
-        JButton btDelete = new JButton("Xóa");
-        JButton btClear = new JButton("Xóa trắng");
+        var c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(5, 5, 5, 5);
+        c.gridx = 0; c.gridy = 0; pnKMTextField.add(lblMaKM, c);
+                     c.gridy = 1; pnKMTextField.add(lblTenKM, c);
+                     c.gridy = 2; pnKMTextField.add(lblPhanTramGiam, c);
+                     c.gridy = 3; pnKMTextField.add(lblNgayHieuLuc, c);
+                     c.gridy = 4; pnKMTextField.add(lblNgayKetThuc, c);
 
-        pnBtn2.add(btAdd);
-        pnBtn2.add(btUpdate);
-        pnBtn2.add(btDelete);
-        pnBtn2.add(btClear);
+        c.gridx = 1; c.gridy = 0; pnKMTextField.add(tfMaKM, c);
+                     c.gridy = 1; pnKMTextField.add(tfTenKM, c);
+                     c.gridy = 2; pnKMTextField.add(tfPhanTramGiam, c);
+                     c.gridy = 3; pnKMTextField.add(pnNgayHieuLuc, c);
+                     c.gridy = 4; pnKMTextField.add(pnNgayKetThuc, c);
+        eastLayout.add(pnKMTextField);
 
-        pnRight.add(pnBtn2, BorderLayout.PAGE_END);
 
-        //JSplitPane
-        JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pnLeft, pnRight);
-        add(jSplitPane);
-
+        add(tabs);
         setSize(950, 550);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Load dữ liệu ban đầu
-        loadAllKhuyenMai();
+        setVisible(true);
 
-        // Event handlers
-        btnRefresh.addActionListener(e -> loadAllKhuyenMai());
-        btnSearch.addActionListener(e -> TimKiem());
-        
-        btAdd.addActionListener(e -> ThemKhuyenMai());
-        btUpdate.addActionListener(e -> SuaKhuyenMai());
-        btDelete.addActionListener(e -> XoaKhuyenMai());
-        btClear.addActionListener(e -> ClearForm());
-        
-        // Event khi click vào table
-        khuyenMaiTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int row = khuyenMaiTable.getSelectedRow();
-                if (row >= 0) {
-                    txtMaKhM.setText(tableModel.getValueAt(row, 0).toString());
-                    txtTenKhM.setText(tableModel.getValueAt(row, 1).toString());
-                    txtPhanTramGiam.setText(tableModel.getValueAt(row, 2).toString());
-                    txtNgayHieuLuc.setText(tableModel.getValueAt(row, 3).toString());
-                    txtNgayKetThuc.setText(tableModel.getValueAt(row, 4).toString());
-                }
-            }
+        // ============ Chức năng ============
+        tableKM.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting())
+                return;
+            loadTextField(listKhuyenMai.get(tableKM.getSelectedRow()));
         });
-        
-        // Event khi chọn trạng thái
-        listTrangThai.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                String selected = listTrangThai.getSelectedValue();
-                if (selected != null) {
-                    if (selected.equals("Tất cả khuyến mãi")) {
-                        loadAllKhuyenMai();
-                    } else if (selected.equals("Đang hiệu lực")) {
-                        loadKhuyenMaiHieuLuc();
-                    } else if (selected.equals("Đã hết hạn")) {
-                        loadKhuyenMaiHetHan();
-                    }
-                }
-            }
-        });
+
+        btnAddKM.addActionListener(e -> themKhuyenMai());
+        btnDeleteKM.addActionListener(e -> xoaKhuyenMai(tableKM.getSelectedRow()));
+        btnClearKM.addActionListener(e -> clearTextField());
     }
 
-    // Load tất cả khuyến mãi
-    private void loadAllKhuyenMai() {
-        tableModel.setRowCount(0);
-        List<KhuyenMai> listKM = khuyenMaiDAO.getAllKhuyenMai();
-        
-        for (KhuyenMai km : listKM) {
-            Object[] row = {
-                km.getMaKhM(),
-                km.getTenKhM(),
-                km.getPhanTramGiam() + "%",
-                km.getNgayHieuLuc(),
-                km.getNgayKetThuc()
-            };
-            tableModel.addRow(row);
-        }
+    private void loadAllKM() {
+        tableModel.addAll(khuyenMaiDAO.getAllKhuyenMai());
     }
 
-    // Load khuyến mãi đang hiệu lực
-    private void loadKhuyenMaiHieuLuc() {
-        tableModel.setRowCount(0);
-        List<KhuyenMai> listKM = khuyenMaiDAO.getKhuyenMaiHieuLuc();
+    private void loadTextField(KhuyenMai khuyenMai) {
+        tfMaKM.setText(khuyenMai.getMaKhM().toString());
+        tfTenKM.setText(khuyenMai.getTenKhM());
+        tfPhanTramGiam.setText(khuyenMai.getPhanTramGiam().toString());
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(khuyenMai.getNgayHieuLuc());
+
+        tfDayNHL.setText(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
+        tfMonthNHL.setText(String.valueOf(cal.get(Calendar.MONTH)+1));
+        tfYearNHL.setText(String.valueOf(cal.get(Calendar.YEAR)));
         
-        for (KhuyenMai km : listKM) {
-            Object[] row = {
-                km.getMaKhM(),
-                km.getTenKhM(),
-                km.getPhanTramGiam() + "%",
-                km.getNgayHieuLuc(),
-                km.getNgayKetThuc()
-            };
-            tableModel.addRow(row);
-        }
+        cal.setTime(khuyenMai.getNgayKetThuc());
+        tfDayNKT.setText(String.valueOf(cal.get(Calendar.DAY_OF_MONTH)));
+        tfMonthNKT.setText(String.valueOf(cal.get(Calendar.MONTH)+1));
+        tfYearNKT.setText(String.valueOf(cal.get(Calendar.YEAR)));
     }
 
-    // Load khuyến mãi đã hết hạn
-    private void loadKhuyenMaiHetHan() {
-        tableModel.setRowCount(0);
-        List<KhuyenMai> listKM = khuyenMaiDAO.getKhuyenMaiHetHan();
-        
-        for (KhuyenMai km : listKM) {
-            Object[] row = {
-                km.getMaKhM(),
-                km.getTenKhM(),
-                km.getPhanTramGiam() + "%",
-                km.getNgayHieuLuc(),
-                km.getNgayKetThuc()
-            };
-            tableModel.addRow(row);
-        }
-    }
+    private KhuyenMai getTextField() {
+        int maKM = Integer.parseInt(tfMaKM.getText());
+        String tenKM = tfTenKM.getText();
 
-    // Tìm kiếm khuyến mãi
-    private void TimKiem() {
-        String keyword = JOptionPane.showInputDialog(this, "Nhập tên khuyến mãi:");
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            tableModel.setRowCount(0);
-            List<KhuyenMai> listKM = khuyenMaiDAO.timKiemKhuyenMai(keyword);
-            
-            for (KhuyenMai km : listKM) {
-                Object[] row = {
-                    km.getMaKhM(),
-                    km.getTenKhM(),
-                    km.getPhanTramGiam() + "%",
-                    km.getNgayHieuLuc(),
-                    km.getNgayKetThuc()
-                };
-                tableModel.addRow(row);
-            }
-            
-            if (tableModel.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy khuyến mãi nào!");
-            }
+        if (tenKM.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Tên khuyến mãi không được để trống", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            tfTenKM.requestFocus();
+            return null;
         }
-    }
 
-    // ============ CRUD KHUYẾN MÃI ============
-    private void ThemKhuyenMai() {
-        // Validate input
-        if (txtTenKhM.getText().trim().isEmpty() ||
-            txtPhanTramGiam.getText().trim().isEmpty() ||
-            txtNgayHieuLuc.getText().trim().isEmpty() ||
-            txtNgayKetThuc.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
-            return;
-        }
-        
+        int phanTramGiam;
         try {
-            // Validate ngày
-            java.util.Date ngayHL = dateFormat.parse(txtNgayHieuLuc.getText().trim());
-            java.util.Date ngayKT = dateFormat.parse(txtNgayKetThuc.getText().trim());
-            
-            if (ngayKT.before(ngayHL)) {
-                JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau ngày hiệu lực!");
-                return;
+            phanTramGiam = Integer.parseInt(tfPhanTramGiam.getText());
+            if (phanTramGiam >= 100 || phanTramGiam <= 0) {
+                JOptionPane.showMessageDialog(null, "Phần trăm phải trong khoảng từ 1 đến 99", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
-            
-            int phanTramGiam = Integer.parseInt(txtPhanTramGiam.getText().trim());
-            
-            if (phanTramGiam < 0 || phanTramGiam > 100) {
-                JOptionPane.showMessageDialog(this, "Phần trăm giảm phải từ 0-100!");
-                return;
-            }
-            
-            KhuyenMai km = new KhuyenMai(
-                txtTenKhM.getText().trim(),
-                phanTramGiam,
-                new Date(ngayHL.getTime()),
-                new Date(ngayKT.getTime())
-            );
-            
-            if (khuyenMaiDAO.themKhuyenMai(km)) {
-                JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!");
-                loadAllKhuyenMai();
-                ClearForm();
-            } else {
-                JOptionPane.showMessageDialog(this, "Lỗi thêm khuyến mãi!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ! (yyyy-MM-dd)", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Phần trăm giảm phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Sai định dạng phần trăm", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            tfPhanTramGiam.requestFocus();
+            tfPhanTramGiam.selectAll();
+            return null;
         }
-    }
 
-    private void SuaKhuyenMai() {
-        if (txtMaKhM.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi cần sửa!");
-            return;
-        }
-        
+        Date ngayHieuLuc;
+        String day = tfDayNHL.getText();
+        String month = tfMonthNHL.getText();
+        String year = tfYearNHL.getText();
+
         try {
-            int maKhM = Integer.parseInt(txtMaKhM.getText().trim());
-            
-            // Validate ngày
-            java.util.Date ngayHL = dateFormat.parse(txtNgayHieuLuc.getText().trim());
-            java.util.Date ngayKT = dateFormat.parse(txtNgayKetThuc.getText().trim());
-            
-            if (ngayKT.before(ngayHL)) {
-                JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau ngày hiệu lực!");
-                return;
-            }
-            
-            int phanTramGiam = Integer.parseInt(txtPhanTramGiam.getText().trim());
-            
-            if (phanTramGiam < 0 || phanTramGiam > 100) {
-                JOptionPane.showMessageDialog(this, "Phần trăm giảm phải từ 0-100!");
-                return;
-            }
-            
-            KhuyenMai km = new KhuyenMai(
-                maKhM,
-                txtTenKhM.getText().trim(),
-                phanTramGiam,
-                new Date(ngayHL.getTime()),
-                new Date(ngayKT.getTime())
-            );
-            
-            if (khuyenMaiDAO.suaKhuyenMai(km)) {
-                JOptionPane.showMessageDialog(this, "Sửa khuyến mãi thành công!");
-                loadAllKhuyenMai();
-                ClearForm();
-            } else {
-                JOptionPane.showMessageDialog(this, "Lỗi sửa khuyến mãi!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Định dạng ngày không hợp lệ! (yyyy-MM-dd)", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Dữ liệu không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+            ngayHieuLuc = Date.valueOf(String.format("%s-%s-%s", year, month, day));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Sai định dạng ngày tháng!");
+            tfDayNHL.setText("");
+            tfMonthNHL.setText("");
+            tfYearNHL.setText("");
+            tfDayNHL.requestFocus();
+            return null;
+        }
+
+        Date ngayKetThuc;
+        day = tfDayNKT.getText();
+        month = tfMonthNKT.getText();
+        year = tfYearNKT.getText();
+
+        try {
+            ngayKetThuc = Date.valueOf(String.format("%s-%s-%s", year, month, day));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Sai định dạng ngày tháng!");
+            tfDayNKT.setText("");
+            tfMonthNKT.setText("");
+            tfYearNKT.setText("");
+            tfDayNKT.requestFocus();
+            return null;
+        }
+
+        return new KhuyenMai(maKM, tenKM, phanTramGiam, ngayHieuLuc, ngayKetThuc);
+    }
+
+    private void clearTextField() {
+        tfMaKM.setText("");
+        tfTenKM.setText("");
+        tfPhanTramGiam.setText("");
+        tfDayNHL.setText("");
+        tfMonthNHL.setText("");
+        tfYearNHL.setText("");
+        tfDayNKT.setText("");
+        tfMonthNKT.setText("");
+        tfYearNKT.setText("");
+    }
+
+    private void themKhuyenMai() {
+        KhuyenMai khuyenMai = getTextField();
+        if (khuyenMai == null) return;
+        int key = khuyenMaiDAO.themKhuyenMai(khuyenMai);
+
+        if (key != -1) {
+            khuyenMai.setMaKhM(key);
+            tableModel.addRow(khuyenMai);
+            System.out.println(listKhuyenMai.size());
+            clearTextField();
+
+            JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!");
         }
     }
 
-    private void XoaKhuyenMai() {
-        if (txtMaKhM.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn khuyến mãi cần xóa!");
-            return;
-        }
-        
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Bạn có chắc muốn xóa khuyến mãi này?", 
-            "Xác nhận", JOptionPane.YES_NO_OPTION);
-            
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                int maKhM = Integer.parseInt(txtMaKhM.getText().trim());
-                
-                if (khuyenMaiDAO.xoaKhuyenMai(maKhM)) {
-                    JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công!");
-                    loadAllKhuyenMai();
-                    ClearForm();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi xóa khuyến mãi!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Mã khuyến mãi không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
+    private void xoaKhuyenMai(int selectedRow) {
+        KhuyenMai khuyenMai = getTextField();
+        if (khuyenMai == null || selectedRow == -1) return;
 
-    private void ClearForm() {
-        txtMaKhM.setText("");
-        txtTenKhM.setText("");
-        txtPhanTramGiam.setText("");
-        txtNgayHieuLuc.setText("");
-        txtNgayKetThuc.setText("");
-        khuyenMaiTable.clearSelection();
-        txtTenKhM.requestFocus();
+        if (khuyenMaiDAO.xoaKhuyenMai(khuyenMai.getMaKhM())) {
+            tableModel.deleteRow(selectedRow);
+            clearTextField();
+            JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công!");
+        }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            frmKhuyenMai frm = new frmKhuyenMai();
-            frm.setVisible(true);
-        });
+        new frmKhuyenMai("Test");
     }
 }

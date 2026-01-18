@@ -11,7 +11,7 @@ public class KhuyenMaiDAO {
     // Lấy tất cả khuyến mãi
     public List<KhuyenMai> getAllKhuyenMai() {
         List<KhuyenMai> list = new ArrayList<>();
-        String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc FROM khuyenmai ORDER BY maKhM DESC";
+        String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc FROM khuyenmai";
         
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -115,22 +115,29 @@ public class KhuyenMaiDAO {
     }
     
     // Thêm khuyến mãi
-    public boolean themKhuyenMai(KhuyenMai km) {
+    public int themKhuyenMai(KhuyenMai km) {
         String sql = "INSERT INTO khuyenmai (tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             
             pstmt.setString(1, km.getTenKhM());
             pstmt.setInt(2, km.getPhanTramGiam());
             pstmt.setDate(3, km.getNgayHieuLuc());
             pstmt.setDate(4, km.getNgayKetThuc());
+            pstmt.executeUpdate();
             
-            int result = pstmt.executeUpdate();
-            return result > 0;
+            ResultSet rs = pstmt.getGeneratedKeys();
+            int key = -1;
+            while (rs.next()) {
+                key = rs.getInt(1);
+                System.out.println(String.format("Key = %s", key));
+            }
+            rs.close();
+            return key;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
     
