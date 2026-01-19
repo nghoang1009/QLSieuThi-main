@@ -38,7 +38,6 @@ public class frmHoaDon extends JFrame {
     
     // Map để lưu nhân viên
     private Map<String, Integer> nhanVienMap = new HashMap<>();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public frmHoaDon() {
         super("Quản lý hóa đơn");

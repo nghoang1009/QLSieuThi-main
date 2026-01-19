@@ -17,9 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class frmGiaoHang extends JFrame {
     private JTable giaoHangTable, itemTable;
@@ -36,10 +34,7 @@ public class frmGiaoHang extends JFrame {
     private ItemGiaoHangDAO itemGiaoHangDAO;
     private KhachHangDAO khachHangDAO;
     private SanPhamDAO sanPhamDAO;
-    
-    // Map để lưu khách hàng
-    private Map<String, Integer> khachHangMap = new HashMap<>();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
     public frmGiaoHang() {
         super("Quản lý giao hàng");

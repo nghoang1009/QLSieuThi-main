@@ -38,7 +38,6 @@ public class frmGioHang extends JFrame {
     
     // Map để lưu khách hàng
     private Map<String, Integer> khachHangMap = new HashMap<>();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public frmGioHang() {
         super("Quản lý giỏ hàng");
