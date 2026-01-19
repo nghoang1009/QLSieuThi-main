@@ -17,7 +17,7 @@ public class KhachHangDAO {
     // Lấy tất cả khách hàng
     public List<KhachHang> getAllKhachHang() {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang";
         
         try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
@@ -40,7 +40,7 @@ public class KhachHangDAO {
     
     // Lấy khách hàng theo mã (bao gồm thông tin tài khoản)
     public KhachHang getKhachHangById(int maKH) {
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE maKH = ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE maKH = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -72,7 +72,7 @@ public class KhachHangDAO {
     // Lấy khách hàng theo khu vực
     public List<KhachHang> getKhachHangByKhuVuc(String khuVuc) {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE diachi LIKE ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE diachi LIKE ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -114,7 +114,7 @@ public class KhachHangDAO {
             }
             
             // Thêm khách hàng với maTK vừa tạo
-            String sql = "INSERT INTO khachHang (maKH, ten, sdt, diachi) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO khachhang (maKH, ten, sdt, diachi) VALUES (?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, maTK);
             pstmt.setString(2, kh.getTen());
@@ -171,7 +171,7 @@ public class KhachHangDAO {
             }
             
             // Update khách hàng
-            String sql = "UPDATE khachHang SET ten=?, sdt=?, diachi=? WHERE maKH=?";
+            String sql = "UPDATE khachhang SET ten=?, sdt=?, diachi=? WHERE maKH=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, kh.getTen());
             pstmt.setString(2, kh.getSdt());
@@ -218,7 +218,7 @@ public class KhachHangDAO {
     // Tìm kiếm khách hàng theo tên hoặc SĐT
     public List<KhachHang> timKiemKhachHang(String keyword) {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE ten LIKE ? OR sdt LIKE ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE ten LIKE ? OR sdt LIKE ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
