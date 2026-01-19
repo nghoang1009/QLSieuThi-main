@@ -60,6 +60,7 @@ public class KhachHangDAO {
                 TaiKhoan tk = taiKhoanDAO.getTaiKhoanById(maKH);
                 kh.setTaiKhoan(tk);
                 
+                rs.close();
                 return kh;
             }
         } catch (SQLException e) {
@@ -88,6 +89,7 @@ public class KhachHangDAO {
                 );
                 list.add(kh);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -234,6 +236,7 @@ public class KhachHangDAO {
                 );
                 list.add(kh);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

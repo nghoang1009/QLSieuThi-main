@@ -28,6 +28,7 @@ public class DangNhapDAO {
             rs.close();
             return chucVu;
         } catch (Exception ex) {
+            ex.printStackTrace();
             return null;
         }
     }

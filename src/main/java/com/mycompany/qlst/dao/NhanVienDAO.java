@@ -64,6 +64,7 @@ public class NhanVienDAO {
                 TaiKhoan tk = taiKhoanDAO.getTaiKhoanById(maNV);
                 nv.setTaiKhoan(tk);
                 
+                rs.close();
                 return nv;
             }
         } catch (SQLException e) {
@@ -93,6 +94,7 @@ public class NhanVienDAO {
                     rs.getString("diaChi")
                 );
                 list.add(nv);
+                rs.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -245,6 +247,7 @@ public class NhanVienDAO {
                 );
                 list.add(nv);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

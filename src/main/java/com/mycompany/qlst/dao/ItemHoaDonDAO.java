@@ -43,6 +43,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
             
             list.add(item);
         }
+        rs.close();
     } catch (SQLException e) {
         e.printStackTrace();
     }
@@ -69,7 +70,8 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
             
             String tenSP = rs.getString("tenSP");
             int gia = rs.getInt("gia");
-            
+            rs.close();
+
             // Thêm item vào hóa đơn với tenSP và gia
             String sql = "INSERT INTO item_hoadon (maHoaDon, tenSP, gia, soLuong, phanTramGiam) " +
                         "VALUES (?, ?, ?, ?, 0)";
@@ -229,6 +231,7 @@ public List<ItemHoaDon> getItemsByHoaDon(int maHoaDon) {
             if (rs.next()) {
                 return rs.getInt(1) > 0;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -11,9 +11,8 @@ public class ThongKeDAO {
     // Thống kê tổng quan
     public Map<String, Integer> thongKeTongQuan() {
         Map<String, Integer> result = new HashMap<>();
-        Connection conn = DatabaseConnector.getConnection();
         
-        try {
+        try (Connection conn = DatabaseConnector.getConnection();){
             // Đếm số sản phẩm
             String sqlSP = "SELECT COUNT(*) as total FROM sanpham";
             Statement stmtSP = conn.createStatement();
@@ -21,6 +20,8 @@ public class ThongKeDAO {
             if (rsSP.next()) {
                 result.put("soSanPham", rsSP.getInt("total"));
             }
+            stmtSP.close();
+            rsSP.close();
             
             // Đếm số khách hàng
             String sqlKH = "SELECT COUNT(*) as total FROM khachhang";
@@ -29,6 +30,8 @@ public class ThongKeDAO {
             if (rsKH.next()) {
                 result.put("soKhachHang", rsKH.getInt("total"));
             }
+            stmtKH.close();
+            rsKH.close();
             
             // Đếm số hóa đơn
             String sqlHD = "SELECT COUNT(*) as total FROM hoadon";
@@ -37,6 +40,8 @@ public class ThongKeDAO {
             if (rsHD.next()) {
                 result.put("soHoaDon", rsHD.getInt("total"));
             }
+            stmtHD.close();
+            rsHD.close();
             
             // Đếm số nhân viên
             String sqlNV = "SELECT COUNT(*) as total FROM nhanvien";
@@ -45,6 +50,8 @@ public class ThongKeDAO {
             if (rsNV.next()) {
                 result.put("soNhanVien", rsNV.getInt("total"));
             }
+            stmtNV.close();
+            rsNV.close();
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,6 +80,7 @@ public class ThongKeDAO {
                 String thang = "Tháng " + rs.getInt("thang");
                 result.put(thang, rs.getLong("doanhThu"));
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -98,6 +106,7 @@ public class ThongKeDAO {
             while (rs.next()) {
                 result.put(rs.getString("tenSP"), rs.getInt("tongSoLuong"));
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -206,6 +215,7 @@ public class ThongKeDAO {
             if (rs.next()) {
                 return rs.getLong("doanhThu");
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

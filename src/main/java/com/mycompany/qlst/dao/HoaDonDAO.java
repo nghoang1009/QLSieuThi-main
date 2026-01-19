@@ -55,8 +55,10 @@ public class HoaDonDAO {
                     rs.getDate("ngayThanhToan")
                 );
                 hd.setTenNV(rs.getString("ten"));
+                rs.close();
                 return hd;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -87,6 +89,7 @@ public class HoaDonDAO {
                 hd.setTenNV(rs.getString("ten"));
                 list.add(hd);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -152,6 +155,7 @@ public class HoaDonDAO {
                 hd.setTenNV(rs.getString("ten"));
                 list.add(hd);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -173,6 +177,7 @@ public class HoaDonDAO {
             if (rs.next()) {
                 tongTien = rs.getInt("tongTien");
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

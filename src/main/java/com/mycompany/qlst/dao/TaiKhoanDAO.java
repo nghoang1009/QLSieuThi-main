@@ -23,6 +23,7 @@ public class TaiKhoanDAO {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
+                rs.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -45,6 +46,7 @@ public class TaiKhoanDAO {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
+                rs.close();
             }
         }
         return -1;
@@ -67,6 +69,7 @@ public class TaiKhoanDAO {
                     rs.getString("matKhau")
                 );
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

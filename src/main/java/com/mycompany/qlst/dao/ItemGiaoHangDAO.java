@@ -33,6 +33,7 @@ public class ItemGiaoHangDAO {
                 item.setGia(rs.getInt("gia"));
                 list.add(item);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -106,6 +107,7 @@ public class ItemGiaoHangDAO {
             if (rs.next()) {
                 return rs.getInt(1) > 0;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
