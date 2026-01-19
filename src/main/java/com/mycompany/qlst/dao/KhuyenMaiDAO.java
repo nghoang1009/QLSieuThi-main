@@ -52,6 +52,7 @@ public class KhuyenMaiDAO {
                     rs.getDate("ngayKetThuc")
                 );
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -200,6 +201,7 @@ public class KhuyenMaiDAO {
                 );
                 list.add(km);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

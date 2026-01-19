@@ -57,8 +57,10 @@ public class GiaoHangDAO {
                     rs.getString("tinhTrang")
                 );
                 gh.setTenKH(rs.getString("ten"));
+                rs.close();
                 return gh;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -90,6 +92,7 @@ public class GiaoHangDAO {
                 gh.setTenKH(rs.getString("ten"));
                 list.add(gh);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -174,6 +177,7 @@ public class GiaoHangDAO {
                 gh.setTenKH(rs.getString("ten"));
                 list.add(gh);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -196,6 +200,7 @@ public class GiaoHangDAO {
             if (rs.next()) {
                 tongTien = rs.getInt("tongTien");
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

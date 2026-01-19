@@ -55,8 +55,10 @@ public class GioHangDAO {
                     rs.getDate("ngayTao")
                 );
                 gh.setTenKH(rs.getString("ten"));
+                rs.close();
                 return gh;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -87,6 +89,7 @@ public class GioHangDAO {
                 gh.setTenKH(rs.getString("ten"));
                 list.add(gh);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -151,6 +154,7 @@ public class GioHangDAO {
                 gh.setTenKH(rs.getString("ten"));
                 list.add(gh);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -173,6 +177,7 @@ public class GioHangDAO {
             if (rs.next()) {
                 tongTien = rs.getInt("tongTien");
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

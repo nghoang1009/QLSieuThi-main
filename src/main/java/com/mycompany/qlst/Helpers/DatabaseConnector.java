@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnector {
-    private static final String URL = "jdbc:mysql://localhost:3306/QLSieuThi";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String URL = "jdbc:mariadb://localhost:3306/QLSieuThi";
+    private static final String USER = "alcen";
+    private static final String PASSWORD = "alcenium";
     
     private static Connection connection = null;
 
@@ -15,7 +15,7 @@ public class DatabaseConnector {
     public static Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
-                Class.forName("com.mysql.cj.jdbc.Driver");
+                Class.forName("org.mariadb.jdbc.Driver");
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
             }
         } catch (ClassNotFoundException e) {

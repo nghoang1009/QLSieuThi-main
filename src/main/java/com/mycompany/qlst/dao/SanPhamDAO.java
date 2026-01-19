@@ -56,6 +56,7 @@ public class SanPhamDAO {
                     rs.getInt("soLuong")
                 );
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,6 +84,7 @@ public class SanPhamDAO {
                 );
                 list.add(sp);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -167,6 +169,7 @@ public class SanPhamDAO {
                 );
                 list.add(sp);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

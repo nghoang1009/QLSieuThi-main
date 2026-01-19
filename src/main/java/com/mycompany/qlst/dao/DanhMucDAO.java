@@ -46,6 +46,7 @@ public class DanhMucDAO {
                     rs.getString("tenDM")
                 );
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -112,8 +113,10 @@ public class DanhMucDAO {
             ResultSet rs = pstmt.executeQuery();
             
             if (rs.next()) {
+                rs.close();
                 return rs.getInt("maDM");
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

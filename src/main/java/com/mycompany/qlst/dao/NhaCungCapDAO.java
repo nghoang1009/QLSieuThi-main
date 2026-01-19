@@ -50,6 +50,7 @@ public class NhaCungCapDAO {
                     rs.getString("thanhPho")
                 );
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,6 +77,7 @@ public class NhaCungCapDAO {
                 );
                 list.add(ncc);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -157,6 +159,7 @@ public class NhaCungCapDAO {
                 );
                 list.add(ncc);
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -176,6 +179,7 @@ public class NhaCungCapDAO {
             if (rs.next()) {
                 return rs.getInt("soLuong");
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
