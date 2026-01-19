@@ -147,12 +147,12 @@ public class frmSanPham extends JFrame {
         loadDanhMuc();
         loadAllSanPham();
 
-        // Event handlers cho Danh mục
+        // Event cho Danh mục
         btnAdd.addActionListener(e -> ThemDanhMuc());
         btnUpdate.addActionListener(e -> SuaDanhMuc());
         btnDelete.addActionListener(e -> XoaDanhMuc());
 
-        // Event handlers cho Sản phẩm
+        // Event cho Sản phẩm
         btAdd.addActionListener(e -> ThemSP());
         btUpdate.addActionListener(e -> SuaSP());
         btDelete.addActionListener(e -> XoaSP());
