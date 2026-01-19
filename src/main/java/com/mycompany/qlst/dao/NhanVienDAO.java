@@ -17,7 +17,7 @@ public class NhanVienDAO {
     // Lấy tất cả nhân viên
     public List<NhanVien> getAllNhanVien() {
         List<NhanVien> list = new ArrayList<>();
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien";
         
         try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
@@ -42,7 +42,7 @@ public class NhanVienDAO {
     
     // Lấy nhân viên theo mã (bao gồm thông tin tài khoản)
     public NhanVien getNhanVienById(int maNV) {
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE maNV = ?";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien WHERE maNV = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -75,7 +75,7 @@ public class NhanVienDAO {
     // Lấy nhân viên theo giới tính
     public List<NhanVien> getNhanVienByGioiTinh(String gioiTinh) {
         List<NhanVien> list = new ArrayList<>();
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE gioiTinh = ?";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien WHERE gioiTinh = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -100,39 +100,41 @@ public class NhanVienDAO {
         return list;
     }
     
-    // Thêm nhân viên (bao gồm tạo tài khoản)
+    // Thêm nhân viên (bao gồm tạo tài khoản) - ĐÃ SỬA
     public boolean themNhanVien(NhanVien nv, TaiKhoan tk) {
         Connection conn = null;
+        PreparedStatement pstmt = null;
+        
         try {
+            // Lấy connection và tắt auto-commit
             conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
-            // Thêm tài khoản trước
-            int maTK = taiKhoanDAO.themTaiKhoan(tk);
+            // Thêm tài khoản trước - SỬ DỤNG CÙNG CONNECTION
+            int maTK = taiKhoanDAO.themTaiKhoan(tk, conn);
             if (maTK == -1) {
                 conn.rollback();
                 return false;
             }
             
             // Thêm nhân viên với maTK vừa tạo
-            String sql = "INSERT INTO nhanvien (maNV, ten, ngaySinh, gioiTinh, sdt, diaChi) VALUES (?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setInt(1, maTK);
-                pstmt.setString(2, nv.getTen());
-                pstmt.setDate(3, nv.getNgaySinh());
-                pstmt.setString(4, nv.getGioiTinh());
-                pstmt.setString(5, nv.getSdt());
-                pstmt.setString(6, nv.getDiaChi());
-                
-                int result = pstmt.executeUpdate();
-                
-                if (result > 0) {
-                    conn.commit();
-                    return true;
-                } else {
-                    conn.rollback();
-                    return false;
-                }
+            String sql = "INSERT INTO nhanVien (maNV, ten, ngaySinh, gioiTinh, sdt, diaChi) VALUES (?, ?, ?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, maTK);
+            pstmt.setString(2, nv.getTen());
+            pstmt.setDate(3, nv.getNgaySinh());
+            pstmt.setString(4, nv.getGioiTinh());
+            pstmt.setString(5, nv.getSdt());
+            pstmt.setString(6, nv.getDiaChi());
+            
+            int result = pstmt.executeUpdate();
+            
+            if (result > 0) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
             }
         } catch (SQLException e) {
             if (conn != null) {
@@ -145,49 +147,53 @@ public class NhanVienDAO {
             e.printStackTrace();
             return false;
         } finally {
-            if (conn != null) {
-                try {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) {
                     conn.setAutoCommit(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    conn.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
     
-    // Sửa nhân viên (bao gồm cập nhật tài khoản)
+    // Sửa nhân viên (bao gồm cập nhật tài khoản) - ĐÃ SỬA
     public boolean suaNhanVien(NhanVien nv, TaiKhoan tk) {
         Connection conn = null;
+        PreparedStatement pstmt = null;
+        
         try {
+            // Lấy connection và tắt auto-commit
             conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
-            // Update tài khoản
+            // Update tài khoản - SỬ DỤNG CÙNG CONNECTION
             tk.setMaTK(nv.getMaNV());
-            if (!taiKhoanDAO.suaTaiKhoan(tk)) {
+            if (!taiKhoanDAO.suaTaiKhoan(tk, conn)) {
                 conn.rollback();
                 return false;
             }
             
             // Update nhân viên
-            String sql = "UPDATE nhanvien SET ten=?, ngaySinh=?, gioiTinh=?, sdt=?, diaChi=? WHERE maNV=?";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, nv.getTen());
-                pstmt.setDate(2, nv.getNgaySinh());
-                pstmt.setString(3, nv.getGioiTinh());
-                pstmt.setString(4, nv.getSdt());
-                pstmt.setString(5, nv.getDiaChi());
-                pstmt.setInt(6, nv.getMaNV());
-                
-                int result = pstmt.executeUpdate();
-                
-                if (result > 0) {
-                    conn.commit();
-                    return true;
-                } else {
-                    conn.rollback();
-                    return false;
-                }
+            String sql = "UPDATE nhanVien SET ten=?, ngaySinh=?, gioiTinh=?, sdt=?, diaChi=? WHERE maNV=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, nv.getTen());
+            pstmt.setDate(2, nv.getNgaySinh());
+            pstmt.setString(3, nv.getGioiTinh());
+            pstmt.setString(4, nv.getSdt());
+            pstmt.setString(5, nv.getDiaChi());
+            pstmt.setInt(6, nv.getMaNV());
+            
+            int result = pstmt.executeUpdate();
+            
+            if (result > 0) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
             }
         } catch (SQLException e) {
             if (conn != null) {
@@ -200,12 +206,14 @@ public class NhanVienDAO {
             e.printStackTrace();
             return false;
         } finally {
-            if (conn != null) {
-                try {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) {
                     conn.setAutoCommit(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    conn.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -218,7 +226,7 @@ public class NhanVienDAO {
     // Tìm kiếm nhân viên theo tên
     public List<NhanVien> timKiemNhanVien(String keyword) {
         List<NhanVien> list = new ArrayList<>();
-        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanvien WHERE ten LIKE ?";
+        String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, sdt, diaChi FROM nhanVien WHERE ten LIKE ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

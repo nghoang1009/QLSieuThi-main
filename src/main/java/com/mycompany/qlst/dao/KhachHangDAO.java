@@ -17,7 +17,7 @@ public class KhachHangDAO {
     // Lấy tất cả khách hàng
     public List<KhachHang> getAllKhachHang() {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang";
         
         try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
@@ -40,7 +40,7 @@ public class KhachHangDAO {
     
     // Lấy khách hàng theo mã (bao gồm thông tin tài khoản)
     public KhachHang getKhachHangById(int maKH) {
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE maKH = ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE maKH = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -71,7 +71,7 @@ public class KhachHangDAO {
     // Lấy khách hàng theo khu vực
     public List<KhachHang> getKhachHangByKhuVuc(String khuVuc) {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE diachi LIKE ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE diachi LIKE ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -94,37 +94,39 @@ public class KhachHangDAO {
         return list;
     }
     
-    // Thêm khách hàng (bao gồm tạo tài khoản)
+    // Thêm khách hàng (bao gồm tạo tài khoản) - ĐÃ SỬA
     public boolean themKhachHang(KhachHang kh, TaiKhoan tk) {
         Connection conn = null;
+        PreparedStatement pstmt = null;
+        
         try {
+            // Lấy connection và tắt auto-commit
             conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
-            // Thêm tài khoản trước
-            int maTK = taiKhoanDAO.themTaiKhoan(tk);
+            // Thêm tài khoản trước - SỬ DỤNG CÙNG CONNECTION
+            int maTK = taiKhoanDAO.themTaiKhoan(tk, conn);
             if (maTK == -1) {
                 conn.rollback();
                 return false;
             }
             
             // Thêm khách hàng với maTK vừa tạo
-            String sql = "INSERT INTO khachhang (maKH, ten, sdt, diachi) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setInt(1, maTK);
-                pstmt.setString(2, kh.getTen());
-                pstmt.setString(3, kh.getSdt());
-                pstmt.setString(4, kh.getDiaChi());
-                
-                int result = pstmt.executeUpdate();
-                
-                if (result > 0) {
-                    conn.commit();
-                    return true;
-                } else {
-                    conn.rollback();
-                    return false;
-                }
+            String sql = "INSERT INTO khachHang (maKH, ten, sdt, diachi) VALUES (?, ?, ?, ?)";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, maTK);
+            pstmt.setString(2, kh.getTen());
+            pstmt.setString(3, kh.getSdt());
+            pstmt.setString(4, kh.getDiaChi());
+            
+            int result = pstmt.executeUpdate();
+            
+            if (result > 0) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
             }
         } catch (SQLException e) {
             if (conn != null) {
@@ -137,47 +139,51 @@ public class KhachHangDAO {
             e.printStackTrace();
             return false;
         } finally {
-            if (conn != null) {
-                try {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) {
                     conn.setAutoCommit(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    conn.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
     
-    // Sửa khách hàng (bao gồm cập nhật tài khoản)
+    // Sửa khách hàng (bao gồm cập nhật tài khoản) - ĐÃ SỬA
     public boolean suaKhachHang(KhachHang kh, TaiKhoan tk) {
         Connection conn = null;
+        PreparedStatement pstmt = null;
+        
         try {
+            // Lấy connection và tắt auto-commit
             conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
             
-            // Update tài khoản
+            // Update tài khoản - SỬ DỤNG CÙNG CONNECTION
             tk.setMaTK(kh.getMaKH());
-            if (!taiKhoanDAO.suaTaiKhoan(tk)) {
+            if (!taiKhoanDAO.suaTaiKhoan(tk, conn)) {
                 conn.rollback();
                 return false;
             }
             
             // Update khách hàng
-            String sql = "UPDATE khachhang SET ten=?, sdt=?, diachi=? WHERE maKH=?";
-            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                pstmt.setString(1, kh.getTen());
-                pstmt.setString(2, kh.getSdt());
-                pstmt.setString(3, kh.getDiaChi());
-                pstmt.setInt(4, kh.getMaKH());
-                
-                int result = pstmt.executeUpdate();
-                
-                if (result > 0) {
-                    conn.commit();
-                    return true;
-                } else {
-                    conn.rollback();
-                    return false;
-                }
+            String sql = "UPDATE khachHang SET ten=?, sdt=?, diachi=? WHERE maKH=?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, kh.getTen());
+            pstmt.setString(2, kh.getSdt());
+            pstmt.setString(3, kh.getDiaChi());
+            pstmt.setInt(4, kh.getMaKH());
+            
+            int result = pstmt.executeUpdate();
+            
+            if (result > 0) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
             }
         } catch (SQLException e) {
             if (conn != null) {
@@ -190,12 +196,14 @@ public class KhachHangDAO {
             e.printStackTrace();
             return false;
         } finally {
-            if (conn != null) {
-                try {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) {
                     conn.setAutoCommit(true);
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                    conn.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -208,7 +216,7 @@ public class KhachHangDAO {
     // Tìm kiếm khách hàng theo tên hoặc SĐT
     public List<KhachHang> timKiemKhachHang(String keyword) {
         List<KhachHang> list = new ArrayList<>();
-        String sql = "SELECT maKH, ten, sdt, diachi FROM khachhang WHERE ten LIKE ? OR sdt LIKE ?";
+        String sql = "SELECT maKH, ten, sdt, diachi FROM khachHang WHERE ten LIKE ? OR sdt LIKE ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

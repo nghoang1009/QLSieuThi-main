@@ -8,7 +8,7 @@ public class TaiKhoanDAO {
     
     // Thêm tài khoản và trả về mã tài khoản vừa tạo
     public int themTaiKhoan(TaiKhoan tk) {
-        String sql = "INSERT INTO taikhoan (tenTK, matKhau) VALUES (?, ?)";
+        String sql = "INSERT INTO taiKhoan (tenTK, matKhau) VALUES (?, ?)";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -30,9 +30,29 @@ public class TaiKhoanDAO {
         return -1;
     }
     
+    // THÊM METHOD MỚI: Thêm tài khoản với connection từ bên ngoài (cho transaction)
+    public int themTaiKhoan(TaiKhoan tk, Connection conn) throws SQLException {
+        String sql = "INSERT INTO taiKhoan (tenTK, matKhau) VALUES (?, ?)";
+        
+        try (PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, tk.getTenTK());
+            pstmt.setString(2, tk.getMatKhau());
+            
+            int result = pstmt.executeUpdate();
+            
+            if (result > 0) {
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return -1;
+    }
+    
     // Lấy tài khoản theo mã
     public TaiKhoan getTaiKhoanById(int maTK) {
-        String sql = "SELECT maTK, tenTK, matKhau FROM taikhoan WHERE maTK = ?";
+        String sql = "SELECT maTK, tenTK, matKhau FROM taiKhoan WHERE maTK = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -54,27 +74,21 @@ public class TaiKhoanDAO {
     }
     
     // Sửa tài khoản
-    public boolean suaTaiKhoan(TaiKhoan tk) {
-        String sql = "UPDATE taikhoan SET tenTK = ?, matKhau = ? WHERE maTK = ?";
+    public boolean suaTaiKhoan(TaiKhoan tk, Connection conn) throws SQLException {
+        String sql = "UPDATE taiKhoan SET tenTK = ?, matKhau = ? WHERE maTK = ?";
         
-        try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, tk.getTenTK());
             pstmt.setString(2, tk.getMatKhau());
             pstmt.setInt(3, tk.getMaTK());
             
-            int result = pstmt.executeUpdate();
-            return result > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            return pstmt.executeUpdate() > 0;
         }
     }
     
     // Xóa tài khoản
     public boolean xoaTaiKhoan(int maTK) {
-        String sql = "DELETE FROM taikhoan WHERE maTK = ?";
+        String sql = "DELETE FROM taiKhoan WHERE maTK = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
