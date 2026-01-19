@@ -216,7 +216,6 @@ public class frmGioHang extends JFrame {
         loadKhachHang();
         loadAllGioHang();
 
-        // Event handlers
         btnRefresh.addActionListener(e -> {
             loadKhachHang();
             loadAllGioHang();
