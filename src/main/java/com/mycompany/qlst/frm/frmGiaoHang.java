@@ -322,7 +322,7 @@ public class frmGiaoHang extends JFrame {
         }
     }
 
-    // Load items trong đơn giao hàng
+    // Load sản phẩm trong đơn giao hàng
     private void loadItemsGiaoHang(int maGiaoHang) {
         itemTableModel.setRowCount(0);
         int tongTien = 0;
