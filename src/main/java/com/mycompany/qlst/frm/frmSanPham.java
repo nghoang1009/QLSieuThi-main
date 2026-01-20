@@ -199,7 +199,7 @@ public class frmSanPham extends JFrame {
         });
     }
 
-    // Load danh mục từ database
+    // Load danh mục
     private void loadDanhMuc() {
         categoryListModel.clear();
         comboBoxModel.removeAllElements();
@@ -213,7 +213,7 @@ public class frmSanPham extends JFrame {
         }
     }
 
-    // Load nhà cung cấp từ database
+    // Load nhà cung cấp
     private void loadNhaCungCap() {
         nccComboBoxModel.removeAllElements();
         nhaCungCapMap.clear();
@@ -358,7 +358,7 @@ public class frmSanPham extends JFrame {
             int gia = Integer.parseInt(txtGia.getText().trim());
             int soLuong = Integer.parseInt(txtSL.getText().trim());
             
-            SanPham sp = new SanPham(maDM, tenSP, gia, soLuong);
+            SanPham sp = new SanPham(maDM, tenSP, gia, soLuong, maNCC);
             sp.setMaNCC(maNCC);
             
             if (SanPhamDAO.themSanPham(sp)) {
@@ -391,7 +391,7 @@ public class frmSanPham extends JFrame {
             int gia = Integer.parseInt(txtGia.getText().trim());
             int soLuong = Integer.parseInt(txtSL.getText().trim());
             
-            SanPham sp = new SanPham(maSP, maDM, tenSP, gia, soLuong);
+            SanPham sp = new SanPham(maSP, maDM, tenSP, gia, soLuong, maNCC);
             sp.setMaNCC(maNCC);
             
             if (SanPhamDAO.suaSanPham(sp)) {

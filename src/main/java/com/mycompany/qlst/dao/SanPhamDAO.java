@@ -23,7 +23,8 @@ public class SanPhamDAO {
                     rs.getInt("maDM"),
                     rs.getString("tenSP"),
                     rs.getInt("gia"),
-                    rs.getInt("soLuong")
+                    rs.getInt("soLuong"),
+                    rs.getInt("maNCC")
                 );
                 sp.setMaNCC(rs.getInt("maNCC"));
                 list.add(sp);
@@ -51,7 +52,8 @@ public class SanPhamDAO {
                     rs.getInt("maDM"),
                     rs.getString("tenSP"),
                     rs.getInt("gia"),
-                    rs.getInt("soLuong")
+                    rs.getInt("soLuong"),
+                    rs.getInt("maNCC")
                 );
                 sp.setMaNCC(rs.getInt("maNCC"));
                 list.add(sp);
@@ -79,7 +81,8 @@ public class SanPhamDAO {
                     rs.getInt("maDM"),
                     rs.getString("tenSP"),
                     rs.getInt("gia"),
-                    rs.getInt("soLuong")
+                    rs.getInt("soLuong"),
+                    rs.getInt("maNCC")
                 );
                 sp.setMaNCC(rs.getInt("maNCC"));
                 return sp;
@@ -153,7 +156,7 @@ public class SanPhamDAO {
     // Tìm kiếm sản phẩm theo tên
     public static List<SanPham> timKiemSanPham(String keyword) {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE tenSP LIKE ? " +
+        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong, maNCC FROM sanpham WHERE tenSP LIKE ? " +
                      "OR gia LIKE ? " +
                      "OR soLuong LIKE ?";
         
@@ -170,9 +173,9 @@ public class SanPhamDAO {
                     rs.getInt("maDM"),
                     rs.getString("tenSP"),
                     rs.getInt("gia"),
-                    rs.getInt("soLuong")
+                    rs.getInt("soLuong"),
+                    rs.getInt("maNCC")
                 );
-                sp.setMaNCC(rs.getInt("maNCC"));
                 list.add(sp);
             }
             rs.close();

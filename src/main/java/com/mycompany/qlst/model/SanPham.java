@@ -13,20 +13,22 @@ public class SanPham {
     }
 
     // Constructor đầy đủ (với maSP)
-    public SanPham(int maSP, int maDM, String tenSP, int gia, int soLuong) {
+    public SanPham(int maSP, int maDM, String tenSP, int gia, int soLuong, Integer maNCC) {
         this.maSP = maSP;
         this.maDM = maDM;
         this.tenSP = tenSP;
         this.gia = gia;
         this.soLuong = soLuong;
+        this.maNCC = maNCC;
     }
 
     // Constructor không có maSP (dùng khi thêm mới)
-    public SanPham(int maDM, String tenSP, int gia, int soLuong) {
+    public SanPham(int maDM, String tenSP, int gia, int soLuong, Integer maNCC) {
         this.maDM = maDM;
         this.tenSP = tenSP;
         this.gia = gia;
         this.soLuong = soLuong;
+        this.maNCC = maNCC;
     }
 
     // Getters và Setters
