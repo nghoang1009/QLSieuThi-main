@@ -140,7 +140,8 @@ CREATE TABLE spkhuyenmai (
   maSP INT,
   maKhM INT,
   CONSTRAINT spkhuyenmai_ibfk_1 FOREIGN KEY (maSP) REFERENCES sanpham (maSP) ON DELETE CASCADE,
-  CONSTRAINT spkhuyenmai_ibfk_2 FOREIGN KEY (maKhM) REFERENCES khuyenmai (maKhM) ON DELETE CASCADE
+  CONSTRAINT spkhuyenmai_ibfk_2 FOREIGN KEY (maKhM) REFERENCES khuyenmai (maKhM) ON DELETE CASCADE,
+  PRIMARY KEY (maSP, maKhM)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 INSERT INTO spkhuyenmai (maSP, maKhM) VALUES
