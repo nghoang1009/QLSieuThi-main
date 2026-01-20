@@ -33,7 +33,6 @@ public class frmGiaoHang extends JFrame {
     private GiaoHangDAO giaoHangDAO;
     private ItemGiaoHangDAO itemGiaoHangDAO;
     private KhachHangDAO khachHangDAO;
-    private SanPhamDAO sanPhamDAO;
 
 
     public frmGiaoHang() {
@@ -48,8 +47,8 @@ public class frmGiaoHang extends JFrame {
         giaoHangDAO = new GiaoHangDAO();
         itemGiaoHangDAO = new ItemGiaoHangDAO();
         khachHangDAO = new KhachHangDAO();
-        sanPhamDAO = new SanPhamDAO();
 
+        
         JLabel lbTitle = new JLabel("QUẢN LÝ GIAO HÀNG", JLabel.CENTER);
         lbTitle.setForeground(Color.blue);
         lbTitle.setFont(new Font("Arial", Font.BOLD, 25));
@@ -373,7 +372,7 @@ public class frmGiaoHang extends JFrame {
         
         try {
             int maSP = Integer.parseInt(maSPStr);
-            SanPham sp = sanPhamDAO.getSanPhamById(maSP);
+            SanPham sp = SanPhamDAO.getSanPhamById(maSP);
             
             if (sp != null) {
                 txtTenSP.setText(sp.getTenSP());
@@ -520,7 +519,7 @@ public class frmGiaoHang extends JFrame {
             }
             
             // Kiểm tra tồn kho
-            SanPham sp = sanPhamDAO.getSanPhamById(maSP);
+            SanPham sp = SanPhamDAO.getSanPhamById(maSP);
             if (sp == null) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
                 return;
@@ -613,7 +612,7 @@ public class frmGiaoHang extends JFrame {
             }
             
             // Kiểm tra tồn kho
-            SanPham sp = sanPhamDAO.getSanPhamById(maSP);
+            SanPham sp = SanPhamDAO.getSanPhamById(maSP);
             if (sp != null && soLuongMoi > sp.getSoLuong()) {
                 JOptionPane.showMessageDialog(this, "Số lượng vượt quá tồn kho! (Còn: " + sp.getSoLuong() + ")");
                 return;

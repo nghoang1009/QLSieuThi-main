@@ -71,12 +71,6 @@ public class SanPham {
 
     @Override
     public String toString() {
-        return "SanPham{" +
-                "maSP=" + maSP +
-                ", maDM=" + maDM +
-                ", tenSP='" + tenSP + '\'' +
-                ", gia=" + gia +
-                ", soLuong=" + soLuong +
-                '}';
+        return tenSP;
     }
 }

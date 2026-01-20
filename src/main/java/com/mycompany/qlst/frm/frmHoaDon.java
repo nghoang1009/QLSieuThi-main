@@ -34,7 +34,7 @@ public class frmHoaDon extends JFrame {
     private HoaDonDAO hoaDonDAO;
     private ItemHoaDonDAO itemHoaDonDAO;
     private NhanVienDAO nhanVienDAO;
-    private SanPhamDAO sanPhamDAO;
+
     
     // Map để lưu nhân viên
     private Map<String, Integer> nhanVienMap = new HashMap<>();
@@ -51,7 +51,7 @@ public class frmHoaDon extends JFrame {
         hoaDonDAO = new HoaDonDAO();
         itemHoaDonDAO = new ItemHoaDonDAO();
         nhanVienDAO = new NhanVienDAO();
-        sanPhamDAO = new SanPhamDAO();
+        
 
         JLabel lbTitle = new JLabel("QUẢN LÝ HÓA ĐƠN", JLabel.CENTER);
         lbTitle.setForeground(Color.blue);
@@ -385,7 +385,7 @@ public class frmHoaDon extends JFrame {
         
         try {
             int maSP = Integer.parseInt(maSPStr);
-            SanPham sp = sanPhamDAO.getSanPhamById(maSP);
+            SanPham sp = SanPhamDAO.getSanPhamById(maSP);
             
             if (sp != null) {
                 txtTenSP.setText(sp.getTenSP());
@@ -511,7 +511,7 @@ public class frmHoaDon extends JFrame {
             }
             
             // Kiểm tra tồn kho
-            SanPham sp = sanPhamDAO.getSanPhamById(maSP);
+            SanPham sp = SanPhamDAO.getSanPhamById(maSP);
             if (sp == null) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm!");
                 return;
@@ -609,7 +609,7 @@ public class frmHoaDon extends JFrame {
             }
             
             // Kiểm tra tồn kho
-            SanPham sp = sanPhamDAO.getSanPhamById(maSP);
+            SanPham sp = SanPhamDAO.getSanPhamById(maSP);
             if (sp != null) {
                 // Tính số lượng có thể thêm = tồn kho hiện tại + số lượng cũ
                 int soLuongCoThe = sp.getSoLuong() + soLuongCu;

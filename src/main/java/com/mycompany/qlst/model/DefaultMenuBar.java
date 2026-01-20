@@ -8,8 +8,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 import com.mycompany.qlst.frm.frmGiaoHang;
 import com.mycompany.qlst.frm.frmGioHang;
