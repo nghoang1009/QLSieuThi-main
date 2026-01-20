@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 public class DatabaseConnector {
     private static final String URL = "jdbc:mariadb://localhost:3306/QLSieuThi";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String USER = "alcen";
+    private static final String PASSWORD = "alcenium";
     
     private static Connection connection = null;
 

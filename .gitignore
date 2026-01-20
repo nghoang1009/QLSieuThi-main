@@ -74,3 +74,7 @@ target/maven-archiver/pom.properties
 target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
 target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
 target/classes/com/mycompany/qlst/model/DefaultMenuBar$1.class
+target/classes/com/mycompany/qlst/model/ApDungKhuyenMai.class
+target/classes/com/mycompany/qlst/model/ApplyKMTableModel.class
+target/classes/com/mycompany/qlst/dao/ApDungKMDAO.class
+.gitignore

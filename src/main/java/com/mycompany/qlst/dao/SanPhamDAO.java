@@ -9,7 +9,7 @@ import java.util.List;
 public class SanPhamDAO {
     
     // Lấy tất cả sản phẩm
-    public List<SanPham> getAllSanPham() {
+    public static List<SanPham> getAllSanPham() {
         List<SanPham> list = new ArrayList<>();
         String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham ORDER BY maSP";
         
@@ -35,7 +35,7 @@ public class SanPhamDAO {
     }
     
     // Lấy sản phẩm theo danh mục
-    public List<SanPham> getSanPhamByDanhMuc(int maDM) {
+    public static List<SanPham> getSanPhamByDanhMuc(int maDM) {
         List<SanPham> list = new ArrayList<>();
         String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham WHERE maDM = ? ORDER BY maSP";
         
@@ -64,7 +64,7 @@ public class SanPhamDAO {
     }
     
     // Lấy sản phẩm theo mã
-    public SanPham getSanPhamById(int maSP) {
+    public static SanPham getSanPhamById(int maSP) {
         String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham WHERE maSP = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
@@ -92,8 +92,8 @@ public class SanPhamDAO {
     }
     
     // Thêm sản phẩm
-    public boolean themSanPham(SanPham sp) {
-        String sql = "INSERT INTO sanpham (maDM, maNCC, tenSP, gia, soLuong) VALUES (?, ?, ?, ?, ?)";
+    public static boolean themSanPham(SanPham sp) {
+        String sql = "INSERT INTO sanpham (maDM, tenSP, gia, soLuong) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -113,8 +113,8 @@ public class SanPhamDAO {
     }
     
     // Sửa sản phẩm
-    public boolean suaSanPham(SanPham sp) {
-        String sql = "UPDATE sanpham SET maDM=?, maNCC=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
+    public static boolean suaSanPham(SanPham sp) {
+        String sql = "UPDATE sanpham SET maDM=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -135,7 +135,7 @@ public class SanPhamDAO {
     }
     
     // Xóa sản phẩm
-    public boolean xoaSanPham(int maSP) {
+    public static boolean xoaSanPham(int maSP) {
         String sql = "DELETE FROM sanpham WHERE maSP = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
@@ -151,14 +151,17 @@ public class SanPhamDAO {
     }
     
     // Tìm kiếm sản phẩm theo tên
-    public List<SanPham> timKiemSanPham(String keyword) {
+    public static List<SanPham> timKiemSanPham(String keyword) {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham WHERE tenSP LIKE ? ORDER BY maSP";
+        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE tenSP LIKE ? " +
+                     "OR gia LIKE ? " +
+                     "OR soLuong LIKE ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
-            pstmt.setString(1, "%" + keyword + "%");
+            for (int i=1; i <=3; i++)
+                pstmt.setString(i, "%" + keyword + "%");
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {

@@ -27,7 +27,6 @@ public class frmSanPham extends JFrame {
     private JList<String> list;
     
     // DAO
-    private SanPhamDAO sanPhamDAO;
     private DanhMucDAO danhMucDAO;
     private NhaCungCapDAO nccDAO;
     
@@ -44,7 +43,6 @@ public class frmSanPham extends JFrame {
         setJMenuBar(menuBar);
         
         // Khởi tạo DAO
-        sanPhamDAO = new SanPhamDAO();
         danhMucDAO = new DanhMucDAO();
         nccDAO = new NhaCungCapDAO();
 
@@ -230,7 +228,7 @@ public class frmSanPham extends JFrame {
     // Load tất cả sản phẩm
     private void loadAllSanPham() {
         tableModel.setRowCount(0);
-        List<SanPham> listSP = sanPhamDAO.getAllSanPham();
+        List<SanPham> listSP = SanPhamDAO.getAllSanPham();
         
         for (SanPham sp : listSP) {
             // Lấy tên nhà cung cấp
@@ -259,7 +257,7 @@ public class frmSanPham extends JFrame {
         Integer maDM = danhMucMap.get(tenDM);
         if (maDM == null) return;
         
-        List<SanPham> listSP = sanPhamDAO.getSanPhamByDanhMuc(maDM);
+        List<SanPham> listSP = SanPhamDAO.getSanPhamByDanhMuc(maDM);
         for (SanPham sp : listSP) {
             // Lấy tên nhà cung cấp
             String tenNCC = "";
@@ -363,7 +361,7 @@ public class frmSanPham extends JFrame {
             SanPham sp = new SanPham(maDM, tenSP, gia, soLuong);
             sp.setMaNCC(maNCC);
             
-            if (sanPhamDAO.themSanPham(sp)) {
+            if (SanPhamDAO.themSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!");
                 loadAllSanPham();
                 ClearSP();
@@ -396,7 +394,7 @@ public class frmSanPham extends JFrame {
             SanPham sp = new SanPham(maSP, maDM, tenSP, gia, soLuong);
             sp.setMaNCC(maNCC);
             
-            if (sanPhamDAO.suaSanPham(sp)) {
+            if (SanPhamDAO.suaSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Sửa sản phẩm thành công!");
                 loadAllSanPham();
                 ClearSP();
@@ -421,7 +419,7 @@ public class frmSanPham extends JFrame {
         if (confirm == JOptionPane.YES_OPTION) {
             try {
                 int maSP = Integer.parseInt(txtMaSP.getText().trim());
-                if (sanPhamDAO.xoaSanPham(maSP)) {
+                if (SanPhamDAO.xoaSanPham(maSP)) {
                     JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!");
                     loadAllSanPham();
                     ClearSP();

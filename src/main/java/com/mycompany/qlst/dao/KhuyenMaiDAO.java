@@ -184,12 +184,19 @@ public class KhuyenMaiDAO {
     public static List<KhuyenMai> timKiemKhuyenMai(String keyword) {
         List<KhuyenMai> list = new ArrayList<>();
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc " +
-                     "FROM khuyenmai WHERE tenKhM LIKE ? ORDER BY maKhM DESC";
+                     "FROM khuyenmai " +
+                     "WHERE tenKhM LIKE ? " +
+                     "OR maKhM LIKE ? " +
+                     "OR phanTramGiam LIKE ? " +
+                     "OR ngayHieuLuc LIKE ? " +
+                     "OR ngayKetThuc LIKE ? " +
+                     "ORDER BY maKhM ASC;";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
-            pstmt.setString(1, "%" + keyword + "%");
+            for (int i=1; i<=5; i++)
+                pstmt.setString(i, "%" + keyword + "%");
             ResultSet rs = pstmt.executeQuery();
             
             while (rs.next()) {
