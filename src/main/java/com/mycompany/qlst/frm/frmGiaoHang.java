@@ -106,7 +106,7 @@ public class frmGiaoHang extends JFrame {
         JPanel itemPanel = new JPanel(new BorderLayout());
         itemPanel.setBorder(BorderFactory.createTitledBorder("Chi tiết sản phẩm trong đơn"));
 
-        String[] itemColumns = {"Mã item", "Mã SP", "Tên SP", "Giá", "Số lượng", "Thành tiền"};
+        String[] itemColumns = {"Mã SP", "Tên SP", "Giá", "Số lượng", "Thành tiền"};
         itemTableModel = new DefaultTableModel(itemColumns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
