@@ -103,31 +103,31 @@ public class frmDangNhap extends JFrame {
         String password = new String(txtPassword.getPassword()).trim();
         
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
         String chucVu = DangNhapDAO.kiemTraDangNhap(username, password);
         
-        if (!chucVu.isEmpty()) {
+        if (chucVu != null && !chucVu.isEmpty()) {
             var globalVariables = GlobalAccessPoint.getInstance();
             globalVariables.chucVuNguoiDung = chucVu;
             globalVariables.username = username;
 
             String chucVuText = chucVu.equals("admin") ? "Admin" : "Nhân viên";
             
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                 "Đăng nhập thành công!\nXin chào " + username + " (" + chucVuText + ")",
                 "Thành công", JOptionPane.INFORMATION_MESSAGE);
             
             this.dispose();
             openMainForm();
         } else {
-            JOptionPane.showMessageDialog(null, 
-                "Tên đăng nhập hoặc mật khẩu không đúng!", 
-                "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "Đăng nhập thất bại!\n\nTên đăng nhập hoặc mật khẩu không đúng.\nVui lòng kiểm tra lại thông tin.", 
+                "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
             txtPassword.setText("");
-            txtUsername.requestFocus();
+            txtPassword.requestFocus();
         }
     }
 
