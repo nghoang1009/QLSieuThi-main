@@ -291,7 +291,7 @@ public class frmSanPham extends JFrame {
 
     // ============ CRUD SẢN PHẨM ============
     private void ThemSP() {
-        // Validate input
+        // Kiểm tra trống
         if (txtTenSP.getText().trim().isEmpty() || 
             txtGia.getText().trim().isEmpty() || 
             txtSL.getText().trim().isEmpty()) {
