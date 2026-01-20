@@ -9,7 +9,7 @@ import java.util.List;
 public class KhuyenMaiDAO {
     
     // Lấy tất cả khuyến mãi
-    public List<KhuyenMai> getAllKhuyenMai() {
+    public static List<KhuyenMai> getAllKhuyenMai() {
         List<KhuyenMai> list = new ArrayList<>();
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc FROM khuyenmai";
         
@@ -34,7 +34,7 @@ public class KhuyenMaiDAO {
     }
     
     // Lấy khuyến mãi theo mã
-    public KhuyenMai getKhuyenMaiById(int maKhM) {
+    public static KhuyenMai getKhuyenMaiById(int maKhM) {
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc FROM khuyenmai WHERE maKhM = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
@@ -60,7 +60,7 @@ public class KhuyenMaiDAO {
     }
     
     // Lấy khuyến mãi đang hiệu lực
-    public List<KhuyenMai> getKhuyenMaiHieuLuc() {
+    public static List<KhuyenMai> getKhuyenMaiHieuLuc() {
         List<KhuyenMai> list = new ArrayList<>();
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc " +
                      "FROM khuyenmai " +
@@ -88,7 +88,7 @@ public class KhuyenMaiDAO {
     }
     
     // Lấy khuyến mãi đã hết hạn
-    public List<KhuyenMai> getKhuyenMaiHetHan() {
+    public static List<KhuyenMai> getKhuyenMaiHetHan() {
         List<KhuyenMai> list = new ArrayList<>();
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc " +
                      "FROM khuyenmai " +
@@ -116,7 +116,7 @@ public class KhuyenMaiDAO {
     }
     
     // Thêm khuyến mãi
-    public int themKhuyenMai(KhuyenMai km) {
+    public static int themKhuyenMai(KhuyenMai km) {
         String sql = "INSERT INTO khuyenmai (tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnector.getConnection();
@@ -130,12 +130,13 @@ public class KhuyenMaiDAO {
             
             ResultSet rs = pstmt.getGeneratedKeys();
             int key = -1;
-            while (rs.next()) {
+            if (rs.next()) {
                 key = rs.getInt(1);
                 System.out.println(String.format("Key = %s", key));
+                return key;
             }
             rs.close();
-            return key;
+            return -1;
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
@@ -143,7 +144,7 @@ public class KhuyenMaiDAO {
     }
     
     // Sửa khuyến mãi
-    public boolean suaKhuyenMai(KhuyenMai km) {
+    public static boolean suaKhuyenMai(KhuyenMai km) {
         String sql = "UPDATE khuyenmai SET tenKhM=?, phanTramGiam=?, ngayHieuLuc=?, ngayKetThuc=? WHERE maKhM=?";
         
         try (Connection conn = DatabaseConnector.getConnection();
@@ -164,7 +165,7 @@ public class KhuyenMaiDAO {
     }
     
     // Xóa khuyến mãi
-    public boolean xoaKhuyenMai(int maKhM) {
+    public static boolean xoaKhuyenMai(int maKhM) {
         String sql = "DELETE FROM khuyenmai WHERE maKhM = ?";
         
         try (Connection conn = DatabaseConnector.getConnection();
@@ -180,7 +181,7 @@ public class KhuyenMaiDAO {
     }
     
     // Tìm kiếm khuyến mãi theo tên
-    public List<KhuyenMai> timKiemKhuyenMai(String keyword) {
+    public static List<KhuyenMai> timKiemKhuyenMai(String keyword) {
         List<KhuyenMai> list = new ArrayList<>();
         String sql = "SELECT maKhM, tenKhM, phanTramGiam, ngayHieuLuc, ngayKetThuc " +
                      "FROM khuyenmai WHERE tenKhM LIKE ? ORDER BY maKhM DESC";

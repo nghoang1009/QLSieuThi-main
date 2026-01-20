@@ -37,6 +37,13 @@ public class khuyenMaiTableModel extends AbstractTableModel {
         fireTableRowsDeleted(index, index);
     }
 
+    public void updateRow(int index, KhuyenMai updatedValues) {
+        var oldRow = data.get(index);
+
+        oldRow.setAll(updatedValues);
+        fireTableRowsUpdated(index, index);
+    }
+
     public void addAll(List<KhuyenMai> listKhuyenMai) {
         int firstRow = getRowCount();
         for (KhuyenMai khuyenMai : listKhuyenMai) {

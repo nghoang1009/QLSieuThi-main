@@ -84,6 +84,14 @@ public class KhuyenMai {
         }
     }
 
+    public void setAll(KhuyenMai km) {
+        maKhM = km.getMaKhM();
+        tenKhM = km.getTenKhM();
+        phanTramGiam = km.getPhanTramGiam();
+        ngayHieuLuc = km.getNgayHieuLuc();
+        ngayKetThuc = km.getNgayKetThuc();
+    }
+
     @Override
     public String toString() {
         return tenKhM;

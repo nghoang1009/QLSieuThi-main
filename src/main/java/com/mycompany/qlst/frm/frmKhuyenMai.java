@@ -30,7 +30,6 @@ import com.mycompany.qlst.model.khuyenMaiTableModel;
 public class frmKhuyenMai extends JFrame {
     private List<KhuyenMai> listKhuyenMai;
     private khuyenMaiTableModel tableModel;
-    private KhuyenMaiDAO khuyenMaiDAO = new KhuyenMaiDAO();
 
     private JTextField tfMaKM, tfTenKM, tfPhanTramGiam, tfDayNHL, tfMonthNHL, tfYearNHL, tfDayNKT, tfMonthNKT, tfYearNKT;
 
@@ -43,7 +42,7 @@ public class frmKhuyenMai extends JFrame {
         
         
         // ============ Khuyến mãi ============
-        var titleKM = new JLabel("QUẢN LÝ MÃ GIẢM GIÁ", JLabel.CENTER);
+        var titleKM = new JLabel("QUẢN LÝ KHUYẾN MÃI", JLabel.CENTER);
         var font = new Font("Arial", Font.BOLD, 20);
 
         listKhuyenMai = new ArrayList<>();
@@ -142,16 +141,19 @@ public class frmKhuyenMai extends JFrame {
         tableKM.getSelectionModel().addListSelectionListener(e -> {
             if (e.getValueIsAdjusting())
                 return;
+            if (tableKM.getSelectedRow() == -1)
+                return;
             loadTextField(listKhuyenMai.get(tableKM.getSelectedRow()));
         });
 
         btnAddKM.addActionListener(e -> themKhuyenMai());
+        btnEditKM.addActionListener(e -> suaKhuyenMai(tableKM.getSelectedRow()));
         btnDeleteKM.addActionListener(e -> xoaKhuyenMai(tableKM.getSelectedRow()));
         btnClearKM.addActionListener(e -> clearTextField());
     }
 
     private void loadAllKM() {
-        tableModel.addAll(khuyenMaiDAO.getAllKhuyenMai());
+        tableModel.addAll(KhuyenMaiDAO.getAllKhuyenMai());
     }
 
     private void loadTextField(KhuyenMai khuyenMai) {
@@ -177,8 +179,7 @@ public class frmKhuyenMai extends JFrame {
         try {
             maKM = Integer.parseInt(tfMaKM.getText());
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Bạn chưa điền hoặc chọn khuyến mãi nào cả!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return null;
+            maKM = -1;
         }
 
         String tenKM = tfTenKM.getText();
@@ -253,7 +254,7 @@ public class frmKhuyenMai extends JFrame {
     private void themKhuyenMai() {
         KhuyenMai khuyenMai = getTextField();
         if (khuyenMai == null) return;
-        int key = khuyenMaiDAO.themKhuyenMai(khuyenMai);
+        int key = KhuyenMaiDAO.themKhuyenMai(khuyenMai);
 
         if (key != -1) {
             khuyenMai.setMaKhM(key);
@@ -269,10 +270,27 @@ public class frmKhuyenMai extends JFrame {
         KhuyenMai khuyenMai = getTextField();
         if (khuyenMai == null || selectedRow == -1) return;
 
-        if (khuyenMaiDAO.xoaKhuyenMai(khuyenMai.getMaKhM())) {
+        if (KhuyenMaiDAO.xoaKhuyenMai(khuyenMai.getMaKhM())) {
             tableModel.deleteRow(selectedRow);
             clearTextField();
-            JOptionPane.showMessageDialog(this, "Xóa khuyến mãi thành công!");
+            JOptionPane.showMessageDialog(null, "Xóa khuyến mãi thành công!");
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Xóa khuyến mãi thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void suaKhuyenMai(int selectedRow) {
+        KhuyenMai khuyenMai = getTextField();
+        if (khuyenMai == null || selectedRow == -1) return;
+
+        if (KhuyenMaiDAO.suaKhuyenMai(khuyenMai)) {
+            tableModel.updateRow(selectedRow, khuyenMai);
+            clearTextField();
+            JOptionPane.showMessageDialog(null, "Sửa khuyến mãi thành công");
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Sửa khuyến mãi thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
