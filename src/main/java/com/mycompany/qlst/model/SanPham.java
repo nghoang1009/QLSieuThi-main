@@ -6,12 +6,13 @@ public class SanPham {
     private String tenSP;
     private int gia;
     private int soLuong;
+    private Integer maNCC;
 
     // Constructor mặc định
     public SanPham() {
     }
 
-    // Constructor đầy đủ tham số
+    // Constructor đầy đủ (với maSP)
     public SanPham(int maSP, int maDM, String tenSP, int gia, int soLuong) {
         this.maSP = maSP;
         this.maDM = maDM;
@@ -67,6 +68,14 @@ public class SanPham {
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
+    }
+
+    public Integer getMaNCC() {
+        return maNCC;
+    }
+
+    public void setMaNCC(Integer maNCC) {
+        this.maNCC = maNCC;
     }
 
     @Override
