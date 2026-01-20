@@ -11,7 +11,7 @@ public class SanPhamDAO {
     // Lấy tất cả sản phẩm
     public List<SanPham> getAllSanPham() {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham";
+        String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham ORDER BY maSP";
         
         try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
@@ -25,6 +25,7 @@ public class SanPhamDAO {
                     rs.getInt("gia"),
                     rs.getInt("soLuong")
                 );
+                sp.setMaNCC(rs.getInt("maNCC"));
                 list.add(sp);
             }
         } catch (SQLException e) {
@@ -33,36 +34,10 @@ public class SanPhamDAO {
         return list;
     }
     
-    // Lấy sản phẩm theo mã
-    public SanPham getSanPhamById(int maSP) {
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE maSP = ?";
-        
-        try (Connection conn = DatabaseConnector.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setInt(1, maSP);
-            ResultSet rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                return new SanPham(
-                    rs.getInt("maSP"),
-                    rs.getInt("maDM"),
-                    rs.getString("tenSP"),
-                    rs.getInt("gia"),
-                    rs.getInt("soLuong")
-                );
-            }
-            rs.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-    
     // Lấy sản phẩm theo danh mục
     public List<SanPham> getSanPhamByDanhMuc(int maDM) {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE maDM = ?";
+        String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham WHERE maDM = ? ORDER BY maSP";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -78,6 +53,7 @@ public class SanPhamDAO {
                     rs.getInt("gia"),
                     rs.getInt("soLuong")
                 );
+                sp.setMaNCC(rs.getInt("maNCC"));
                 list.add(sp);
             }
             rs.close();
@@ -87,17 +63,46 @@ public class SanPhamDAO {
         return list;
     }
     
+    // Lấy sản phẩm theo mã
+    public SanPham getSanPhamById(int maSP) {
+        String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham WHERE maSP = ?";
+        
+        try (Connection conn = DatabaseConnector.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, maSP);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                SanPham sp = new SanPham(
+                    rs.getInt("maSP"),
+                    rs.getInt("maDM"),
+                    rs.getString("tenSP"),
+                    rs.getInt("gia"),
+                    rs.getInt("soLuong")
+                );
+                sp.setMaNCC(rs.getInt("maNCC"));
+                return sp;
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     // Thêm sản phẩm
     public boolean themSanPham(SanPham sp) {
-        String sql = "INSERT INTO sanpham (maDM, tenSP, gia, soLuong) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO sanpham (maDM, maNCC, tenSP, gia, soLuong) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, sp.getMaDM());
-            pstmt.setString(2, sp.getTenSP());
-            pstmt.setInt(3, sp.getGia());
-            pstmt.setInt(4, sp.getSoLuong());
+            pstmt.setObject(2, sp.getMaNCC());
+            pstmt.setString(3, sp.getTenSP());
+            pstmt.setInt(4, sp.getGia());
+            pstmt.setInt(5, sp.getSoLuong());
             
             int result = pstmt.executeUpdate();
             return result > 0;
@@ -109,16 +114,17 @@ public class SanPhamDAO {
     
     // Sửa sản phẩm
     public boolean suaSanPham(SanPham sp) {
-        String sql = "UPDATE sanpham SET maDM=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
+        String sql = "UPDATE sanpham SET maDM=?, maNCC=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setInt(1, sp.getMaDM());
-            pstmt.setString(2, sp.getTenSP());
-            pstmt.setInt(3, sp.getGia());
-            pstmt.setInt(4, sp.getSoLuong());
-            pstmt.setInt(5, sp.getMaSP());
+            pstmt.setObject(2, sp.getMaNCC());
+            pstmt.setString(3, sp.getTenSP());
+            pstmt.setInt(4, sp.getGia());
+            pstmt.setInt(5, sp.getSoLuong());
+            pstmt.setInt(6, sp.getMaSP());
             
             int result = pstmt.executeUpdate();
             return result > 0;
@@ -147,7 +153,7 @@ public class SanPhamDAO {
     // Tìm kiếm sản phẩm theo tên
     public List<SanPham> timKiemSanPham(String keyword) {
         List<SanPham> list = new ArrayList<>();
-        String sql = "SELECT maSP, maDM, tenSP, gia, soLuong FROM sanpham WHERE tenSP LIKE ?";
+        String sql = "SELECT maSP, maDM, maNCC, tenSP, gia, soLuong FROM sanpham WHERE tenSP LIKE ? ORDER BY maSP";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -163,6 +169,7 @@ public class SanPhamDAO {
                     rs.getInt("gia"),
                     rs.getInt("soLuong")
                 );
+                sp.setMaNCC(rs.getInt("maNCC"));
                 list.add(sp);
             }
             rs.close();

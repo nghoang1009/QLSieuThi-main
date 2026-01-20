@@ -2,9 +2,11 @@ package com.mycompany.qlst.frm;
 
 import com.mycompany.qlst.dao.DanhMucDAO;
 import com.mycompany.qlst.dao.SanPhamDAO;
+import com.mycompany.qlst.dao.NhaCungCapDAO;
 import com.mycompany.qlst.model.DanhMuc;
 import com.mycompany.qlst.model.DefaultMenuBar;
 import com.mycompany.qlst.model.SanPham;
+import com.mycompany.qlst.model.NhaCungCap;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -20,16 +22,18 @@ public class frmSanPham extends JFrame {
     private DefaultListModel<String> categoryListModel;
     private DefaultTableModel tableModel;
     private JTextField txtMaSP, txtTenSP, txtGia, txtSL;
-    private JComboBox<String> DanhMucComboBox;
-    private DefaultComboBoxModel<String> comboBoxModel;
+    private JComboBox<String> DanhMucComboBox, NhaCungCapComboBox;
+    private DefaultComboBoxModel<String> comboBoxModel, nccComboBoxModel;
     private JList<String> list;
     
     // DAO
     private SanPhamDAO sanPhamDAO;
     private DanhMucDAO danhMucDAO;
+    private NhaCungCapDAO nccDAO;
     
     // Map để lưu maDM tương ứng với tenDM
     private Map<String, Integer> danhMucMap = new HashMap<>();
+    private Map<String, Integer> nhaCungCapMap = new HashMap<>();
 
     public frmSanPham() {
         super("Quản lý sản phẩm");
@@ -42,6 +46,7 @@ public class frmSanPham extends JFrame {
         // Khởi tạo DAO
         sanPhamDAO = new SanPhamDAO();
         danhMucDAO = new DanhMucDAO();
+        nccDAO = new NhaCungCapDAO();
 
         JLabel lbTitle = new JLabel("QUẢN LÝ SẢN PHẨM", JLabel.CENTER);
         lbTitle.setForeground(Color.blue);
@@ -78,8 +83,11 @@ public class frmSanPham extends JFrame {
 
         comboBoxModel = new DefaultComboBoxModel<>();
         DanhMucComboBox = new JComboBox<>(comboBoxModel);
+        
+        nccComboBoxModel = new DefaultComboBoxModel<>();
+        NhaCungCapComboBox = new JComboBox<>(nccComboBoxModel);
 
-        String[] columns = {"Mã SP", "Tên sản phẩm", "Giá", "Số lượng"};
+        String[] columns = {"Mã SP", "Tên sản phẩm", "Giá", "Số lượng", "Nhà cung cấp"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -93,7 +101,7 @@ public class frmSanPham extends JFrame {
         pnRight.add(tablePanel, BorderLayout.PAGE_START);
         tableScrollPane.setPreferredSize(new Dimension(tableScrollPane.getWidth(), 200));
 
-        JPanel pnTT = new JPanel(new GridLayout(5, 2, 5, 3));
+        JPanel pnTT = new JPanel(new GridLayout(6, 2, 5, 3));
         pnTT.setBorder(new TitledBorder(border, "Thông tin sản phẩm"));
         
         JLabel lbDanhMuc = new JLabel("Danh mục:");
@@ -101,6 +109,7 @@ public class frmSanPham extends JFrame {
         JLabel lbTenSP = new JLabel("Tên sản phẩm:");
         JLabel lbGia = new JLabel("Giá:");
         JLabel lbSL = new JLabel("Số lượng:");
+        JLabel lbNCC = new JLabel("Nhà cung cấp:");
 
         txtMaSP = new JTextField(30);
         txtMaSP.setEditable(false);
@@ -118,6 +127,8 @@ public class frmSanPham extends JFrame {
         pnTT.add(txtGia);
         pnTT.add(lbSL);
         pnTT.add(txtSL);
+        pnTT.add(lbNCC);
+        pnTT.add(NhaCungCapComboBox);
 
         pnRight.add(pnTT, BorderLayout.CENTER);
 
@@ -145,6 +156,7 @@ public class frmSanPham extends JFrame {
 
         // Load dữ liệu ban đầu
         loadDanhMuc();
+        loadNhaCungCap();
         loadAllSanPham();
 
         // Event cho Danh mục
@@ -167,6 +179,12 @@ public class frmSanPham extends JFrame {
                     txtTenSP.setText(tableModel.getValueAt(row, 1).toString());
                     txtGia.setText(tableModel.getValueAt(row, 2).toString());
                     txtSL.setText(tableModel.getValueAt(row, 3).toString());
+                    
+                    // Set nhà cung cấp
+                    Object nccValue = tableModel.getValueAt(row, 4);
+                    if (nccValue != null && !nccValue.toString().isEmpty()) {
+                        NhaCungCapComboBox.setSelectedItem(nccValue.toString());
+                    }
                 }
             }
         });
@@ -197,17 +215,39 @@ public class frmSanPham extends JFrame {
         }
     }
 
+    // Load nhà cung cấp từ database
+    private void loadNhaCungCap() {
+        nccComboBoxModel.removeAllElements();
+        nhaCungCapMap.clear();
+        
+        List<NhaCungCap> listNCC = nccDAO.getAllNhaCungCap();
+        for (NhaCungCap ncc : listNCC) {
+            nccComboBoxModel.addElement(ncc.getTenNCC());
+            nhaCungCapMap.put(ncc.getTenNCC(), ncc.getMaNCC());
+        }
+    }
+
     // Load tất cả sản phẩm
     private void loadAllSanPham() {
         tableModel.setRowCount(0);
         List<SanPham> listSP = sanPhamDAO.getAllSanPham();
         
         for (SanPham sp : listSP) {
+            // Lấy tên nhà cung cấp
+            String tenNCC = "";
+            if (sp.getMaNCC() != null && sp.getMaNCC() > 0) {
+                NhaCungCap ncc = nccDAO.getNhaCungCapById(sp.getMaNCC());
+                if (ncc != null) {
+                    tenNCC = ncc.getTenNCC();
+                }
+            }
+            
             Object[] row = {
                 sp.getMaSP(),
                 sp.getTenSP(),
                 sp.getGia(),
-                sp.getSoLuong()
+                sp.getSoLuong(),
+                tenNCC
             };
             tableModel.addRow(row);
         }
@@ -221,11 +261,21 @@ public class frmSanPham extends JFrame {
         
         List<SanPham> listSP = sanPhamDAO.getSanPhamByDanhMuc(maDM);
         for (SanPham sp : listSP) {
+            // Lấy tên nhà cung cấp
+            String tenNCC = "";
+            if (sp.getMaNCC() != null && sp.getMaNCC() > 0) {
+                NhaCungCap ncc = nccDAO.getNhaCungCapById(sp.getMaNCC());
+                if (ncc != null) {
+                    tenNCC = ncc.getTenNCC();
+                }
+            }
+            
             Object[] row = {
                 sp.getMaSP(),
                 sp.getTenSP(),
                 sp.getGia(),
-                sp.getSoLuong()
+                sp.getSoLuong(),
+                tenNCC
             };
             tableModel.addRow(row);
         }
@@ -302,11 +352,16 @@ public class frmSanPham extends JFrame {
         try {
             String tenDM = (String) DanhMucComboBox.getSelectedItem();
             Integer maDM = danhMucMap.get(tenDM);
+            
+            String tenNCC = (String) NhaCungCapComboBox.getSelectedItem();
+            Integer maNCC = nhaCungCapMap.get(tenNCC);
+            
             String tenSP = txtTenSP.getText().trim();
             int gia = Integer.parseInt(txtGia.getText().trim());
             int soLuong = Integer.parseInt(txtSL.getText().trim());
             
             SanPham sp = new SanPham(maDM, tenSP, gia, soLuong);
+            sp.setMaNCC(maNCC);
             
             if (sanPhamDAO.themSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!");
@@ -330,11 +385,16 @@ public class frmSanPham extends JFrame {
             int maSP = Integer.parseInt(txtMaSP.getText().trim());
             String tenDM = (String) DanhMucComboBox.getSelectedItem();
             Integer maDM = danhMucMap.get(tenDM);
+            
+            String tenNCC = (String) NhaCungCapComboBox.getSelectedItem();
+            Integer maNCC = nhaCungCapMap.get(tenNCC);
+            
             String tenSP = txtTenSP.getText().trim();
             int gia = Integer.parseInt(txtGia.getText().trim());
             int soLuong = Integer.parseInt(txtSL.getText().trim());
             
             SanPham sp = new SanPham(maSP, maDM, tenSP, gia, soLuong);
+            sp.setMaNCC(maNCC);
             
             if (sanPhamDAO.suaSanPham(sp)) {
                 JOptionPane.showMessageDialog(this, "Sửa sản phẩm thành công!");
