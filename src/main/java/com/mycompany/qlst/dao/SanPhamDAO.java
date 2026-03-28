@@ -96,7 +96,7 @@ public class SanPhamDAO {
     
     // Thêm sản phẩm
     public static boolean themSanPham(SanPham sp) {
-        String sql = "INSERT INTO sanpham (maDM, tenSP, gia, soLuong) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO sanpham (maDM, maNCC, tenSP, gia, soLuong) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -117,7 +117,7 @@ public class SanPhamDAO {
     
     // Sửa sản phẩm
     public static boolean suaSanPham(SanPham sp) {
-        String sql = "UPDATE sanpham SET maDM=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
+        String sql = "UPDATE sanpham SET maDM=?, maNCC=?, tenSP=?, gia=?, soLuong=? WHERE maSP=?";
         
         try (Connection conn = DatabaseConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
